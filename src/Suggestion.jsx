@@ -8,9 +8,9 @@ class Suggestion extends Component {
 
   render() {
     return (
-
-      <div>
-      </div>
+      <li symbol={this.props.suggestion.symbol}>
+        {this.props.suggestion.name} ({this.props.suggestion.symbol})
+      </li>
 
     );
   }

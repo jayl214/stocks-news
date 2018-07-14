@@ -6,26 +6,26 @@ import './App.css';
 
 class App extends Component {
 
-  constructor = (props) => {
+  constructor(props) {
     super(props)
 
     this.state = {
-      tickersAndNames: [],
-      searchBarInput: "",
+      companyTickersAndNames: [],
       searchbarSuggestions: [],
+      selectedCompany: {}
     }
 
   }
 
-  componentDidMount = () => {
-    this.getTickersAndNames()
+  componentDidMount() {
+    this.getCompanyTickersAndNames()
   }
 
-  getTickersAndNames = () => {
+  getCompanyTickersAndNames = () => {
     axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
       .then( (response) => {
-        this.state.tickersAndNames = response
-        console.log(this.state.tickersAndNames);
+        this.setState({companyTickersAndNames:response.data})
+        console.log(this.state.companyTickersAndNames);
       })
       .catch( (error) => {
         // handle error
@@ -36,14 +36,24 @@ class App extends Component {
       })
   }
 
+  searchbarSuggestionsGenerator = (input, companyList) => {
+    const inputValue = input.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    return inputLength === 0 ? [] : companyList.filter(company =>
+      company.name.toLowerCase().includes(inputValue)
+    );
+  }
+
   searchbarSearch = (event) => {
     const input = event.target.value
-    this.state.searchBarInput = input
-    console.log(this.state.searchBarInput)
+    let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.state.companyTickersAndNames)
+    searchbarSuggestions.length = 5
+    this.setState({searchbarSuggestions:searchbarSuggestions})
+    console.log(searchbarSuggestions)
   }
 
 
-  render = () => {
+  render() {
     return (
       <div className="App">
         <header className="App-header">
