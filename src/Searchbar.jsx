@@ -14,7 +14,7 @@ class Searchbar extends Component {
         <input type="text" placeholder="Company" onKeyUp = {this.props.searchbarSearch} />
         <ul>
           {this.props.searchbarSuggestions.map((suggestion, index)=>{
-            return <Suggestion suggestion = {suggestion} key = {index}  />
+            return <Suggestion suggestion = {suggestion} key = {index} selectSuggestion = {this.props.selectSuggestion} />
           }) }
         </ul>
       </div>
