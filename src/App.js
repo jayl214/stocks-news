@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import Searchbar from './Searchbar.jsx'
-import Graph from './Graph.jsx'
 import axios from 'axios'
 import Chart from 'chart.js'
 import './App.css';
+
+//React components
+import Searchbar from './Searchbar.jsx'
+import Graph from './Graph.jsx'
+import TimeRangeButtons from './TimeRangeButtons.jsx'
 
 class App extends Component {
 
@@ -135,6 +138,8 @@ class App extends Component {
           searchbarSearch = {this.searchbarSearch}
           searchbarSuggestions = {this.state.searchbarSuggestions}
           selectSuggestion = {this.selectSuggestion} />
+
+        <TimeRangeButtons />
 
         <Graph targetName = {this.state.targetName} />
         {/*<canvas id="myChart"></canvas>*/}
