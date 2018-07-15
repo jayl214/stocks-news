@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 
 class Suggestion extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     return (
       <li ticker={this.props.suggestion.symbol} name={this.props.suggestion.name} onClick={this.props.selectSuggestion} >

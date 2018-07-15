@@ -23,15 +23,15 @@ class App extends Component {
 
   componentDidMount() {
     this.getCompanyTickersAndNames()
-
   }
+
+// KLCN8GJ6VQQYF8DS
 
   //call iex api for all company names + tickers for use in search suggestions
   getCompanyTickersAndNames = () => {
     axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
       .then( (response) => {
         this.setState({companyTickersAndNames:response.data})
-        console.log(this.state.companyTickersAndNames);
       })
       .catch( (error) => {
         // handle error
@@ -57,6 +57,7 @@ class App extends Component {
     this.setState({searchbarSuggestions:searchbarSuggestions})
   }
 
+  chartNewData = (ticker, name, timeRange) => {
     axios.get(`https://api.iextrading.com/1.0/stock/${ticker}/chart/${timeRange}`)
       .then( (response) => {
         let stockValues = []
@@ -65,27 +66,9 @@ class App extends Component {
           dates.push(day.date)
           stockValues.push(day.close)
         })
+        //need to destroy previous chart before making a new one, or will have bug where old graph pops up
         this.destroyPreviousChart()
-        const ctx = document.getElementById('stockChart')
-        const chart = new Chart(ctx, {
-            // The type of chart we want to create
-            type: 'line',
-
-            // The data for our dataset
-            data: {
-                labels: dates,
-                datasets: [{
-                    label: name,
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: stockValues,
-                }]
-            },
-
-            // Configuration options go here
-            options: {}
-        })
-        this.setState({chartInstance: chart})
+        this.generateChart(dates, name, stockValues)
       })
       .catch( (error) => {
         // handle error
@@ -102,12 +85,37 @@ class App extends Component {
     }
   }
 
+  generateChart = (dates, name, stockValues) => {
+    const ctx = document.getElementById('stockChart')
+    const chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: dates,
+            datasets: [{
+                label: name,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: stockValues,
+            }]
+        },
+        // Configuration options go here
+        options: {}
+    })
+    //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
+    this.setState({chartInstance: chart})
+  }
+
   selectSuggestion = (event) => {
     let targetTicker = event.target.getAttribute("ticker")
     let targetName = event.target.getAttribute("name")
     this.setState(
       {
         "targetTicker": targetTicker,
+        "targetName": targetName
+      }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
     )
   }
 
@@ -115,6 +123,8 @@ class App extends Component {
     let timeRange = event.target.getAttribute("name")
     this.setState(
       {
+        timeRange: timeRange
+      }, this.chartNewData(this.state.targetTicker, this.state.targetName, timeRange)
     )
   }
 
