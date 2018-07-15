@@ -11,34 +11,20 @@ import TimeRangeButtons from './TimeRangeButtons.jsx'
 
 class App extends Component {
 
-  // constructor(props) {
-  //   super(props)
-
-  //   this.state = {
-  //     companyTickersAndNames: [],
-  //     searchbarSuggestions: [],
-  //     selectedCompany: {}
-  //   }
-
-  // }
-
   state = {
     companyTickersAndNames: [],
     searchbarSuggestions: [],
     selectedCompany: {},
-    targetSymbol: '',
+    targetTicker: '',
     targetName: '',
     timeRange: '1m',
+    // chartInstance: {},
   }
 
   componentDidMount() {
     this.getCompanyTickersAndNames()
-    // // timeRange can be: 1m, 6m, 1y, 5y
-    // this.generateChart('AAPL', '1m')
 
   }
-
-// KLCN8GJ6VQQYF8DS
 
   //call iex api for all company names + tickers for use in search suggestions
   getCompanyTickersAndNames = () => {
@@ -71,7 +57,6 @@ class App extends Component {
     this.setState({searchbarSuggestions:searchbarSuggestions})
   }
 
-  generateChart = (ticker, name, timeRange) => {
     axios.get(`https://api.iextrading.com/1.0/stock/${ticker}/chart/${timeRange}`)
       .then( (response) => {
         let stockValues = []
@@ -80,7 +65,8 @@ class App extends Component {
           dates.push(day.date)
           stockValues.push(day.close)
         })
-        const ctx = document.getElementById('myChart').getContext('2d');
+        this.destroyPreviousChart()
+        const ctx = document.getElementById('stockChart')
         const chart = new Chart(ctx, {
             // The type of chart we want to create
             type: 'line',
@@ -98,7 +84,8 @@ class App extends Component {
 
             // Configuration options go here
             options: {}
-        });
+        })
+        this.setState({chartInstance: chart})
       })
       .catch( (error) => {
         // handle error
@@ -109,16 +96,26 @@ class App extends Component {
       })
   }
 
+  destroyPreviousChart = () => {
+    if (this.state.chartInstance) {
+      this.state.chartInstance.destroy()
+    }
+  }
+
   selectSuggestion = (event) => {
     let targetTicker = event.target.getAttribute("ticker")
     let targetName = event.target.getAttribute("name")
     this.setState(
       {
         "targetTicker": targetTicker,
-        "targetName": targetName
-      }, this.generateChart(targetTicker, targetName, this.state.timeRange)
     )
-    // timeRange can be: 1m, 6m, 1y, 5y
+  }
+
+  selectTimeRange = (event) => {
+    let timeRange = event.target.getAttribute("name")
+    this.setState(
+      {
+    )
   }
 
 
@@ -139,10 +136,9 @@ class App extends Component {
           searchbarSuggestions = {this.state.searchbarSuggestions}
           selectSuggestion = {this.selectSuggestion} />
 
-        <TimeRangeButtons />
+        <TimeRangeButtons selectTimeRange = {this.selectTimeRange} />
 
         <Graph targetName = {this.state.targetName} />
-        {/*<canvas id="myChart"></canvas>*/}
 
       </div>
     )
