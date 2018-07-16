@@ -144,7 +144,9 @@ class App extends Component {
               }
               const fuse = new Fuse(response.data.articles, fuseOptions); // "list" is the item array
               // console.log(fuse.search(appjs.state.targetName + ' ' + appjs.state.targetTicker+ ' stocks'))
-              console.log(fuse.search(appjs.state.targetName + ' stocks'))
+              console.log(fuse.search(appjs.state.targetName))
+              // appjs.setState({articleList:fuse.search(appjs.state.targetName + ' stocks')})
+              appjs.setState({articleList:fuse.search(appjs.state.targetName)})
 
 
               })

@@ -3,9 +3,12 @@ import React, { Component } from 'react';
 class ArticleItem extends Component {
 
   render() {
+    let articleItem = this.props.articleItem
     return (
       <li>
-
+        <h4>{articleItem.title}</h4>
+        <p>{articleItem.description}</p>
+        <a target="_blank" href={articleItem.url}>{articleItem.url}</a>
       </li>
     )
   }
