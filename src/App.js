@@ -9,6 +9,7 @@ import './App.css';
 import Searchbar from './Searchbar.jsx'
 import Graph from './Graph.jsx'
 import TimeRangeButtons from './TimeRangeButtons.jsx'
+import ArticleList from './ArticleList.jsx'
 
 class App extends Component {
 
@@ -19,14 +20,13 @@ class App extends Component {
     targetTicker: '',
     targetName: '',
     timeRange: '1m',
+    articleList: [],
     // chartInstance: {},
   }
 
   componentDidMount() {
     this.getCompanyTickersAndNames()
   }
-
-// KLCN8GJ6VQQYF8DS
 
   //call iex api for all company names + tickers for use in search suggestions
   getCompanyTickersAndNames = () => {
@@ -90,6 +90,7 @@ class App extends Component {
       })
   }
 
+  //selects instance of chart at id.= stockChart and utterly destroys it
   destroyPreviousChart = () => {
     if (this.state.chartInstance) {
       this.state.chartInstance.destroy()
@@ -126,23 +127,24 @@ class App extends Component {
             axios.get(`https://newsapi.org/v2/everything?q=${appjs.state.targetName}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
               .then( (response) => {
                 // this.setState({companyTickersAndNames:response.data})
-                console.log(appjs.state.targetName)
-                console.log(response)
+                // console.log(appjs.state.targetName)
+                // console.log(response)
 
-              //   const fuseOptions = {
-              //   shouldSort: true,
-              //   // threshold: .99,
-              //   location: 0,
-              //   distance: 100,
-              //   maxPatternLength: 32,
-              //   minMatchCharLength: 1,
-              //   keys: [
-              //     "name",
-              //     "symbol"
-              //   ]
-              // }
-              // const fuse = new Fuse(companyList, fuseOptions); // "list" is the item array
-              // return fuse.search(input)
+                const fuseOptions = {
+                shouldSort: true,
+                // threshold: .99,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: [
+                  "title",
+                  "description"
+                ]
+              }
+              const fuse = new Fuse(response.data.articles, fuseOptions); // "list" is the item array
+              // console.log(fuse.search(appjs.state.targetName + ' ' + appjs.state.targetTicker+ ' stocks'))
+              console.log(fuse.search(appjs.state.targetName + ' stocks'))
 
 
               })
@@ -201,6 +203,8 @@ class App extends Component {
         <TimeRangeButtons selectTimeRange = {this.selectTimeRange} />
 
         <Graph targetName = {this.state.targetName} />
+
+        <ArticleList articleList = {this.state.articleList} />
 
       </div>
     )
