@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import axios from 'axios'
-import Chart from 'chart.js'
+import axios from 'axios' //promise based ajax
+import Fuse from 'fuse.js' //fuzzy searcher
+import Chart from 'chart.js' //duh
 import './App.css';
 
 //React components
@@ -43,11 +44,20 @@ class App extends Component {
   }
   //takes in an input string and the array of all company names, returns an array with only companies whose names include the searched string
   searchbarSuggestionsGenerator = (input, companyList) => {
-    const inputValue = input.trim().toLowerCase();
-    const inputLength = inputValue.length;
-    return inputLength === 0 ? [] : companyList.filter(company =>
-      company.name.toLowerCase().includes(inputValue)
-    );
+    const fuseOptions = {
+      shouldSort: true,
+      threshold: 0.6,
+      location: 0,
+      distance: 100,
+      maxPatternLength: 32,
+      minMatchCharLength: 1,
+      keys: [
+        "name",
+        "symbol"
+      ]
+    }
+    const fuse = new Fuse(companyList, fuseOptions); // "list" is the item array
+    return fuse.search(input)
   }
   //takes in search input, returns array of 5 items or less that match search criteria
   searchbarSearch = (event) => {
@@ -60,6 +70,7 @@ class App extends Component {
   chartNewData = (ticker, name, timeRange) => {
     axios.get(`https://api.iextrading.com/1.0/stock/${ticker}/chart/${timeRange}`)
       .then( (response) => {
+        console.log(response.data)
         let stockValues = []
         let dates = []
         response.data.forEach((day) => {
@@ -86,6 +97,7 @@ class App extends Component {
   }
 
   generateChart = (dates, name, stockValues) => {
+    let appjs = this //for calling React functions like setState in onClick
     const ctx = document.getElementById('stockChart')
     const chart = new Chart(ctx, {
         // The type of chart we want to create
@@ -96,13 +108,53 @@ class App extends Component {
             labels: dates,
             datasets: [{
                 label: name,
-                backgroundColor: 'rgb(255, 99, 132)',
+                // backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: stockValues,
             }]
         },
         // Configuration options go here
-        options: {}
+        options: {
+          onClick: function (event){
+            let clickedPoint = this.getElementsAtEvent(event)
+            let clickedPointIndex
+            let clickedPointDate
+            if (clickedPoint.length > 0){
+              clickedPointIndex = clickedPoint[0]._index
+              clickedPointDate = dates[clickedPointIndex]
+            }
+            axios.get(`https://newsapi.org/v2/everything?q=${appjs.state.targetName}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
+              .then( (response) => {
+                // this.setState({companyTickersAndNames:response.data})
+                console.log(appjs.state.targetName)
+                console.log(response)
+
+              //   const fuseOptions = {
+              //   shouldSort: true,
+              //   // threshold: .99,
+              //   location: 0,
+              //   distance: 100,
+              //   maxPatternLength: 32,
+              //   minMatchCharLength: 1,
+              //   keys: [
+              //     "name",
+              //     "symbol"
+              //   ]
+              // }
+              // const fuse = new Fuse(companyList, fuseOptions); // "list" is the item array
+              // return fuse.search(input)
+
+
+              })
+              .catch( (error) => {
+                // handle error
+                console.log(error);
+              })
+              .then( () =>{
+                // always executed
+              })
+          }
+        }
     })
     //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
     this.setState({chartInstance: chart})
