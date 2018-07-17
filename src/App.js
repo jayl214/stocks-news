@@ -26,6 +26,7 @@ class App extends Component {
 
   componentDidMount() {
     this.getCompanyTickersAndNames()
+    console.log(process.env)
   }
 
   //call iex api for all company names + tickers for use in search suggestions
