@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import axios from 'axios' //promise based ajax
 import Fuse from 'fuse.js' //fuzzy searcher
 import Chart from 'chart.js' //duh
-import './App.css';
+import './styles/css/app.css';
 
 //React components
 import Searchbar from './Searchbar.jsx'
@@ -190,25 +189,20 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        {/*<header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>*/}
-        <p className="App-intro">
-          Enter a company name
-        </p>
-        <Searchbar
-          searchbarSearch = {this.searchbarSearch}
-          searchbarSuggestions = {this.state.searchbarSuggestions}
-          selectSuggestion = {this.selectSuggestion} />
+      <div className="app">
+        <header className="app-header">
+          <p className="app-intro">
+            Enter A Company Name
+          </p>
+          <Searchbar
+            searchbarSearch = {this.searchbarSearch}
+            searchbarSuggestions = {this.state.searchbarSuggestions}
+            selectSuggestion = {this.selectSuggestion} />
 
-        <TimeRangeButtons selectTimeRange = {this.selectTimeRange} />
-
+          <TimeRangeButtons selectTimeRange = {this.selectTimeRange} />
+        </header>
         <Graph targetName = {this.state.targetName} />
-
         <ArticleList articleList = {this.state.articleList} />
-
       </div>
     )
   }

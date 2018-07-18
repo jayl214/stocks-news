@@ -5,11 +5,11 @@ class TimeRangeButtons extends Component {
   render() {
     return (
 
-      <div>
-        <button name="1m" onClick={this.props.selectTimeRange}>1 Month</button>
-        <button name="6m" onClick={this.props.selectTimeRange}>6 Months</button>
-        <button name="1y" onClick={this.props.selectTimeRange}>1 Year</button>
-        <button name="5y" onClick={this.props.selectTimeRange}>5 Years</button>
+      <div className="btn-group-timeRange">
+        <button className="btn btn-timeRange-1m" name="1m" onClick={this.props.selectTimeRange}>1 Month</button>
+        <button className="btn btn-timeRange-6m" name="6m" onClick={this.props.selectTimeRange}>6 Months</button>
+        <button className="btn btn-timeRange-1y" name="1y" onClick={this.props.selectTimeRange}>1 Year</button>
+        <button className="btn btn-timeRange-5y" name="5y" onClick={this.props.selectTimeRange}>5 Years</button>
       </div>
 
     );
