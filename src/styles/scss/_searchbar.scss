@@ -1,6 +1,45 @@
 .app-header {
   text-align: center;
+  // position: relative;
   .app-intro{
-    font-size: large;
+    font-size: 200%;
+    @include font1
+  }
+  .searchbar{
+    display: block;
+    .searchbar-input{
+      position: relative;
+      font-size: 1rem;
+      width: 80%;
+      height: 2rem;
+      padding: 0 1rem;
+      border-radius: .5rem;
+      border: 1px solid rgba(160, 160, 160, .5);
+      outline: none;
+    }
+    .searchbar-suggestions{
+      position: absolute;
+      background-color: white;
+      left: 21%;
+      margin-top: .5rem;
+      width: 57%;
+      padding: .5rem;
+      border: 1px solid rgba(160, 160, 160, .5);
+      border-radius: .3rem;
+      &.hidden{
+        visibility: hidden;
+      }
+      .searchbar-suggestion{
+        font-family: $font3;
+        text-align: left;
+        width: 100%;
+        margin: .3rem;
+        cursor: pointer;
+        &:hover{
+          color: blue;
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }

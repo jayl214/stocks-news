@@ -169,8 +169,9 @@ class App extends Component {
     let targetName = event.target.getAttribute("name")
     this.setState(
       {
-        "targetTicker": targetTicker,
-        "targetName": targetName
+        targetTicker: targetTicker,
+        targetName: targetName,
+        searchbarSuggestions: [],
       }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
     )
   }
@@ -184,6 +185,12 @@ class App extends Component {
     )
   }
 
+  hideSuggestions = (event) => {
+    this.setState({
+      searchbarSuggestions: [],
+    })
+  }
+
 
 
 
@@ -191,17 +198,20 @@ class App extends Component {
     return (
       <div className="app">
         <header className="app-header">
-          <p className="app-intro">
-            Enter A Company Name
-          </p>
+          <h1 className="app-intro">
+            Search a Company
+          </h1>
           <Searchbar
             searchbarSearch = {this.searchbarSearch}
             searchbarSuggestions = {this.state.searchbarSuggestions}
-            selectSuggestion = {this.selectSuggestion} />
+            selectSuggestion = {this.selectSuggestion}
+            hideSuggestions = {this.hideSuggestions} />
 
           <TimeRangeButtons selectTimeRange = {this.selectTimeRange} />
         </header>
+
         <Graph targetName = {this.state.targetName} />
+
         <ArticleList articleList = {this.state.articleList} />
       </div>
     )

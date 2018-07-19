@@ -1,4 +1,41 @@
+@import url(https://fonts.googleapis.com/css?family=Fira+Sans);
+@import url(https://fonts.googleapis.com/css?family=Buenard);
+@import url(https://fonts.googleapis.com/css?family=Chivo);
 .app-header {
   text-align: center; }
   .app-header .app-intro {
-    font-size: large; }
+    font-size: 200%;
+    font-weight: normal;
+    font-family: "Fira Sans", sans-serif;
+    font-style: italic; }
+  .app-header .searchbar {
+    display: block; }
+    .app-header .searchbar .searchbar-input {
+      position: relative;
+      font-size: 1rem;
+      width: 80%;
+      height: 2rem;
+      padding: 0 1rem;
+      border-radius: .5rem;
+      border: 1px solid rgba(160, 160, 160, 0.5);
+      outline: none; }
+    .app-header .searchbar .searchbar-suggestions {
+      position: absolute;
+      background-color: white;
+      left: 21%;
+      margin-top: .5rem;
+      width: 57%;
+      padding: .5rem;
+      border: 1px solid rgba(160, 160, 160, 0.5);
+      border-radius: .3rem; }
+      .app-header .searchbar .searchbar-suggestions.hidden {
+        visibility: hidden; }
+      .app-header .searchbar .searchbar-suggestions .searchbar-suggestion {
+        font-family: "Chivo", sans-serif;
+        text-align: left;
+        width: 100%;
+        margin: .3rem;
+        cursor: pointer; }
+        .app-header .searchbar .searchbar-suggestions .searchbar-suggestion:hover {
+          color: blue;
+          text-decoration: underline; }

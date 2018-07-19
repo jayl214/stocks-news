@@ -1,0 +1,16 @@
+// import fonts
+@import url(https://fonts.googleapis.com/css?family=Fira+Sans),
+        url(https://fonts.googleapis.com/css?family=Buenard),
+        url(https://fonts.googleapis.com/css?family=Chivo);
+
+
+
+$font1: 'Fira Sans', sans-serif;
+$font2: 'Buenard', serif;
+$font3: 'Chivo', sans-serif;
+
+@mixin font1{
+  font-weight: normal;
+  font-family: $font1;
+  font-style: italic;
+}
