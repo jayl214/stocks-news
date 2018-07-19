@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 
 class Graph extends Component {
 
-  componentDidUpdate(prevProps, prevState, snapshot){
-    // console.log(this.props)
-  }
-
-
   render() {
     return (
       <div>

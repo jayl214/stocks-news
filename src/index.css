@@ -1,5 +1,11 @@
 body {
   margin: 0;
-  padding: 2% 15% 2% 15%;
   font-family: sans-serif;
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  body{
+    padding: 2% 15% 2% 15%;
+  }
 }

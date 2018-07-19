@@ -25,7 +25,6 @@ class App extends Component {
 
   componentDidMount() {
     this.getCompanyTickersAndNames()
-    console.log(process.env)
   }
 
   //call iex api for all company names + tickers for use in search suggestions
@@ -61,10 +60,15 @@ class App extends Component {
   }
   //takes in search input, returns array of 5 items or less that match search criteria
   searchbarSearch = (event) => {
-    const input = event.target.value
-    let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.state.companyTickersAndNames)
-    searchbarSuggestions.length = 5
-    this.setState({searchbarSuggestions:searchbarSuggestions})
+    //hide suggestions if user hits escape
+    if(event.keyCode===27){
+      this.hideSuggestions()
+    }else{
+      const input = event.target.value
+      let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.state.companyTickersAndNames)
+      searchbarSuggestions.length = 5
+      this.setState({searchbarSuggestions:searchbarSuggestions})
+    }
   }
 
   chartNewData = (ticker, name, timeRange) => {
@@ -185,6 +189,7 @@ class App extends Component {
     )
   }
 
+  //called in searchbarSearch if user hits escape and passed into searchbar input and called onblur
   hideSuggestions = (event) => {
     this.setState({
       searchbarSuggestions: [],
@@ -206,10 +211,9 @@ class App extends Component {
             searchbarSuggestions = {this.state.searchbarSuggestions}
             selectSuggestion = {this.selectSuggestion}
             hideSuggestions = {this.hideSuggestions} />
-
-          <TimeRangeButtons selectTimeRange = {this.selectTimeRange} />
         </header>
 
+        <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
         <Graph targetName = {this.state.targetName} />
 
         <ArticleList articleList = {this.state.articleList} />

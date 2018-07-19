@@ -1,0 +1,24 @@
+.btn-group-timeRange{
+  display: inline-block;
+  .btn{
+    height: 2rem;
+    border: $border-light;
+    border-right: none;
+    outline: none;
+    cursor: pointer;
+    &:first-of-type{
+      border-radius: .3rem 0 0 .3rem;
+    }
+    &:last-of-type{
+      border-right: $border-light;
+      border-radius: 0 .3rem .3rem 0;
+    }
+    &.btn-active{
+      font-weight: bold;
+      background-color: rgba(160,160,160,.15);
+    }
+    &:hover{
+      font-weight: bold;
+    }
+  }
+}

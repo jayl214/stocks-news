@@ -14,3 +14,12 @@ $font3: 'Chivo', sans-serif;
   font-family: $font1;
   font-style: italic;
 }
+
+
+@mixin font3{
+  font-family: $font3
+}
+
+$border-light: 1px solid rgba(160, 160, 160, .5);
+
+

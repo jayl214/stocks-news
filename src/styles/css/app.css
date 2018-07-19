@@ -1,41 +1,58 @@
 @import url(https://fonts.googleapis.com/css?family=Fira+Sans);
 @import url(https://fonts.googleapis.com/css?family=Buenard);
 @import url(https://fonts.googleapis.com/css?family=Chivo);
-.app-header {
-  text-align: center; }
-  .app-header .app-intro {
-    font-size: 200%;
-    font-weight: normal;
-    font-family: "Fira Sans", sans-serif;
-    font-style: italic; }
-  .app-header .searchbar {
-    display: block; }
-    .app-header .searchbar .searchbar-input {
-      position: relative;
-      font-size: 1rem;
-      width: 80%;
-      height: 2rem;
-      padding: 0 1rem;
-      border-radius: .5rem;
-      border: 1px solid rgba(160, 160, 160, 0.5);
-      outline: none; }
-    .app-header .searchbar .searchbar-suggestions {
-      position: absolute;
-      background-color: white;
-      left: 21%;
-      margin-top: .5rem;
-      width: 57%;
-      padding: .5rem;
-      border: 1px solid rgba(160, 160, 160, 0.5);
-      border-radius: .3rem; }
-      .app-header .searchbar .searchbar-suggestions.hidden {
-        visibility: hidden; }
-      .app-header .searchbar .searchbar-suggestions .searchbar-suggestion {
-        font-family: "Chivo", sans-serif;
-        text-align: left;
-        width: 100%;
-        margin: .3rem;
-        cursor: pointer; }
-        .app-header .searchbar .searchbar-suggestions .searchbar-suggestion:hover {
-          color: blue;
-          text-decoration: underline; }
+.app-header .app-intro {
+  font-size: 200%;
+  font-weight: normal;
+  font-family: "Fira Sans", sans-serif;
+  font-style: italic; }
+
+.searchbar {
+  display: block; }
+  .searchbar .searchbar-input {
+    position: relative;
+    font-size: 1rem;
+    width: 80%;
+    height: 2rem;
+    padding: 0 1rem;
+    border-radius: .5rem;
+    border: 1px solid rgba(160, 160, 160, 0.5);
+    outline: none; }
+  .searchbar .searchbar-suggestions {
+    font-family: "Chivo", sans-serif;
+    position: absolute;
+    background-color: white;
+    left: 21%;
+    margin-top: .5rem;
+    width: 57%;
+    padding: .5rem;
+    border: 1px solid rgba(160, 160, 160, 0.5);
+    border-radius: .3rem; }
+    .searchbar .searchbar-suggestions.hidden {
+      visibility: hidden; }
+    .searchbar .searchbar-suggestions .searchbar-suggestion {
+      text-align: left;
+      width: 100%;
+      margin: .3rem;
+      cursor: pointer; }
+      .searchbar .searchbar-suggestions .searchbar-suggestion:hover {
+        text-decoration: underline; }
+
+.btn-group-timeRange {
+  display: inline-block; }
+  .btn-group-timeRange .btn {
+    height: 2rem;
+    border: 1px solid rgba(160, 160, 160, 0.5);
+    border-right: none;
+    outline: none;
+    cursor: pointer; }
+    .btn-group-timeRange .btn:first-of-type {
+      border-radius: .3rem 0 0 .3rem; }
+    .btn-group-timeRange .btn:last-of-type {
+      border-right: 1px solid rgba(160, 160, 160, 0.5);
+      border-radius: 0 .3rem .3rem 0; }
+    .btn-group-timeRange .btn.btn-active {
+      font-weight: bold;
+      background-color: rgba(160, 160, 160, 0.15); }
+    .btn-group-timeRange .btn:hover {
+      font-weight: bold; }
