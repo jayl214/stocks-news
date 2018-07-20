@@ -5,13 +5,13 @@ import Suggestion from './Suggestion.jsx'
 
 class Searchbar extends Component {
 
-  componentDidMount(){
-    this.getCompanyTickersAndNames()
-  }
-
   state = {
     searchbarSuggestions: [],
     companyTickersAndNames: [],
+  }
+
+  componentDidMount(){
+    this.getCompanyTickersAndNames()
   }
 
   getCompanyTickersAndNames = () => {
@@ -35,7 +35,6 @@ class Searchbar extends Component {
     }else{
       const input = event.target.value
       let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.state.companyTickersAndNames)
-      searchbarSuggestions.length = 5
       this.setState({searchbarSuggestions:searchbarSuggestions})
     }
   }
@@ -54,7 +53,10 @@ class Searchbar extends Component {
       ]
     }
     const fuse = new Fuse(companyList, fuseOptions); // "list" is the item array
-    return fuse.search(input)
+    let fuzzySearchResults = fuse.search(input)
+    //top 5 results only
+    fuzzySearchResults.length = 5
+    return fuzzySearchResults
   }
 
   selectSuggestion = (event) => {

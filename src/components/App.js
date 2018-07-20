@@ -55,6 +55,37 @@ class App extends Component {
     }
   }
 
+  sortNewsArticles = (allArticles, searchParameters) =>{
+    const fuseOptions = {
+      shouldSort: true,
+      // threshold: .99,
+      location: 0,
+      distance: 100,
+      maxPatternLength: 32,
+      minMatchCharLength: 1,
+      keys: [
+        "title",
+        "description"
+      ]
+    }
+    const fuse = new Fuse(allArticles, fuseOptions); // "list" is the item array
+    return fuse.search(searchParameters)
+  }
+
+  setNewsArticlesState = (clickedPointDate) => {
+    axios.get(`https://newsapi.org/v2/everything?q=${this.state.targetCompany.name}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
+      .then( (response) => {
+        this.setState({articleList:this.sortNewsArticles(response.data.articles, this.state.targetCompany.name)})
+      })
+      .catch( (error) => {
+        // handle error
+        console.log(error);
+      })
+      .then( () =>{
+        // always executed
+      })
+  }
+
   generateChart = (dates, name, stockValues) => {
     let appjs = this //for calling React functions like setState in onClick
     const ctx = document.getElementById('stockChart')
@@ -66,7 +97,7 @@ class App extends Component {
         data: {
             labels: dates,
             datasets: [{
-                // label: name,
+                label: name,
                 // backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: stockValues,
@@ -83,43 +114,10 @@ class App extends Component {
               clickedPointIndex = clickedPoint[0]._index
               clickedPointDate = dates[clickedPointIndex]
             }
-            axios.get(`https://newsapi.org/v2/everything?q=${appjs.state.targetCompany.name}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
-              .then( (response) => {
-                const fuseOptions = {
-                shouldSort: true,
-                // threshold: .99,
-                location: 0,
-                distance: 100,
-                maxPatternLength: 32,
-                minMatchCharLength: 1,
-                keys: [
-                  "title",
-                  "description"
-                ]
-              }
-              const fuse = new Fuse(response.data.articles, fuseOptions); // "list" is the item array
-              // appjs.setState({articleList:fuse.search(appjs.state.targetCompany.name + ' stocks')})
-              appjs.setState({articleList:fuse.search(appjs.state.targetCompany.name)})
-
-
-              })
-              .catch( (error) => {
-                // handle error
-                console.log(error);
-              })
-              .then( () =>{
-                // always executed
-              })
+            appjs.setNewsArticlesState(clickedPointDate)
           },
           onHover: function(event){
             let hoverPoint = this.getElementsAtXAxis(event)
-            // function addData(chart, label, data) {
-            //   // chart.data.labels.push(label);
-            //   chart.data.datasets.forEach((dataset) => {
-            //       dataset.data.push(data);
-            //   });
-            //   chart.update();
-            // }
           },
           legend:{
             display:false
