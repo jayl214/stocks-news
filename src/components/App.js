@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios' //promise based ajax
 import Fuse from 'fuse.js' //fuzzy searcher
 import Chart from 'chart.js' //duh
-import './styles/css/app.css';
+import '../styles/css/app.css';
 
 //React components
 import Searchbar from './Searchbar.jsx'
@@ -13,62 +13,16 @@ import ArticleList from './ArticleList.jsx'
 class App extends Component {
 
   state = {
-    companyTickersAndNames: [],
-    searchbarSuggestions: [],
-    selectedCompany: {},
+    targetCompany:{
+      name: '',
+      ticker: ''
+    },
     targetTicker: '',
     targetName: '',
     timeRange: '1m',
     articleList: [],
+    appjs: this
     // chartInstance: {},
-  }
-
-  componentDidMount() {
-    this.getCompanyTickersAndNames()
-  }
-
-  //call iex api for all company names + tickers for use in search suggestions
-  getCompanyTickersAndNames = () => {
-    axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
-      .then( (response) => {
-        this.setState({companyTickersAndNames:response.data})
-      })
-      .catch( (error) => {
-        // handle error
-        console.log(error);
-      })
-      .then( () =>{
-        // always executed
-      })
-  }
-  //takes in an input string and the array of all company names, returns an array with only companies whose names include the searched string
-  searchbarSuggestionsGenerator = (input, companyList) => {
-    const fuseOptions = {
-      shouldSort: true,
-      threshold: 0.6,
-      location: 0,
-      distance: 100,
-      maxPatternLength: 32,
-      minMatchCharLength: 1,
-      keys: [
-        "name",
-        "symbol"
-      ]
-    }
-    const fuse = new Fuse(companyList, fuseOptions); // "list" is the item array
-    return fuse.search(input)
-  }
-  //takes in search input, returns array of 5 items or less that match search criteria
-  searchbarSearch = (event) => {
-    //hide suggestions if user hits escape
-    if(event.keyCode===27){
-      this.hideSuggestions()
-    }else{
-      const input = event.target.value
-      let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.state.companyTickersAndNames)
-      searchbarSuggestions.length = 5
-      this.setState({searchbarSuggestions:searchbarSuggestions})
-    }
   }
 
   chartNewData = (ticker, name, timeRange) => {
@@ -112,28 +66,25 @@ class App extends Component {
         data: {
             labels: dates,
             datasets: [{
-                label: name,
+                // label: name,
                 // backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: stockValues,
+                radius: 0,
             }]
         },
         // Configuration options go here
         options: {
           onClick: function (event){
-            let clickedPoint = this.getElementsAtEvent(event)
+            let clickedPoint = this.getElementsAtXAxis(event)
             let clickedPointIndex
             let clickedPointDate
             if (clickedPoint.length > 0){
               clickedPointIndex = clickedPoint[0]._index
               clickedPointDate = dates[clickedPointIndex]
             }
-            axios.get(`https://newsapi.org/v2/everything?q=${appjs.state.targetName}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
+            axios.get(`https://newsapi.org/v2/everything?q=${appjs.state.targetCompany.name}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
               .then( (response) => {
-                // this.setState({companyTickersAndNames:response.data})
-                // console.log(appjs.state.targetName)
-                // console.log(response)
-
                 const fuseOptions = {
                 shouldSort: true,
                 // threshold: .99,
@@ -147,10 +98,8 @@ class App extends Component {
                 ]
               }
               const fuse = new Fuse(response.data.articles, fuseOptions); // "list" is the item array
-              // console.log(fuse.search(appjs.state.targetName + ' ' + appjs.state.targetTicker+ ' stocks'))
-              console.log(fuse.search(appjs.state.targetName))
-              // appjs.setState({articleList:fuse.search(appjs.state.targetName + ' stocks')})
-              appjs.setState({articleList:fuse.search(appjs.state.targetName)})
+              // appjs.setState({articleList:fuse.search(appjs.state.targetCompany.name + ' stocks')})
+              appjs.setState({articleList:fuse.search(appjs.state.targetCompany.name)})
 
 
               })
@@ -161,20 +110,35 @@ class App extends Component {
               .then( () =>{
                 // always executed
               })
-          }
+          },
+          onHover: function(event){
+            let hoverPoint = this.getElementsAtXAxis(event)
+            // function addData(chart, label, data) {
+            //   // chart.data.labels.push(label);
+            //   chart.data.datasets.forEach((dataset) => {
+            //       dataset.data.push(data);
+            //   });
+            //   chart.update();
+            // }
+          },
+          legend:{
+            display:false
+          },
         }
     })
     //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
     this.setState({chartInstance: chart})
   }
 
-  selectSuggestion = (event) => {
+  selectTargetCompany = (event) => {
     let targetTicker = event.target.getAttribute("ticker")
     let targetName = event.target.getAttribute("name")
     this.setState(
       {
-        targetTicker: targetTicker,
-        targetName: targetName,
+        targetCompany:{
+          name: targetName,
+          ticker: targetTicker
+        },
         searchbarSuggestions: [],
       }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
     )
@@ -185,19 +149,9 @@ class App extends Component {
     this.setState(
       {
         timeRange: timeRange
-      }, this.chartNewData(this.state.targetTicker, this.state.targetName, timeRange)
+      }, this.chartNewData(this.state.targetCompany.ticker, this.state.targetCompany.name, timeRange)
     )
   }
-
-  //called in searchbarSearch if user hits escape and passed into searchbar input and called onblur
-  hideSuggestions = (event) => {
-    this.setState({
-      searchbarSuggestions: [],
-    })
-  }
-
-
-
 
   render() {
     return (
@@ -206,15 +160,11 @@ class App extends Component {
           <h1 className="app-intro">
             Search a Company
           </h1>
-          <Searchbar
-            searchbarSearch = {this.searchbarSearch}
-            searchbarSuggestions = {this.state.searchbarSuggestions}
-            selectSuggestion = {this.selectSuggestion}
-            hideSuggestions = {this.hideSuggestions} />
+          <Searchbar selectTargetCompany = {this.selectTargetCompany} />
         </header>
 
         <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
-        <Graph targetName = {this.state.targetName} />
+        <Graph targetCompany = {this.state.targetCompany} />
 
         <ArticleList articleList = {this.state.articleList} />
       </div>
