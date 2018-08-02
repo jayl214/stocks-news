@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import axios from 'axios' //promise based ajax
 import Fuse from 'fuse.js' //fuzzy searcher
 import Chart from 'chart.js' //duh
+
 import '../styles/css/app.css';
 
 //React components
-import Searchbar from './Searchbar.jsx'
-import Graph from './Graph.jsx'
-import TimeRangeButtons from './TimeRangeButtons.jsx'
-import ArticleList from './ArticleList.jsx'
+import Searchbar from './Searchbar'
+import Graph from './Graph'
+import TimeRangeButtons from './TimeRangeButtons'
+import ArticleList from './ArticleList'
+import InstructionsModal from './InstructionsModal'
 
 class App extends Component {
 
@@ -55,6 +57,7 @@ class App extends Component {
     }
   }
 
+  //called in setNewsArticlesState
   sortNewsArticles = (allArticles, searchParameters) =>{
     const fuseOptions = {
       shouldSort: true,
@@ -64,26 +67,83 @@ class App extends Component {
       maxPatternLength: 32,
       minMatchCharLength: 1,
       keys: [
-        "title",
-        "description"
+        "headline",
+        "snippet"
       ]
     }
     const fuse = new Fuse(allArticles, fuseOptions); // "list" is the item array
     return fuse.search(searchParameters)
   }
 
-  setNewsArticlesState = (clickedPointDate) => {
-    axios.get(`https://newsapi.org/v2/everything?q=${this.state.targetCompany.name}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
+  // News API
+  // called in generateChart -> chart.options.onclick
+  // setNewsArticlesState = (clickedPointDate) => {
+  //   console.log(process.env.REACT_APP_NEWS_API_KEY)
+  //   axios.get(`https://newsapi.org/v2/everything?q=${this.state.targetCompany.name}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
+  //     .then( (response) => {
+  //       console.log(`https://newsapi.org/v2/everything?q=${this.state.targetCompany.name}&from=${clickedPointDate}&to=${clickedPointDate}&sortBy=popularity&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`)
+  //       this.setState({articleList:this.sortNewsArticles(response.data.docs, this.state.targetCompany.name)})
+  //     })
+  //     .catch( (error) => {
+  //       // handle error
+  //       console.log(error);
+  //     })
+  // }
+
+  //NY Times API
+  setNewsArticlesState = (clickedPointDate) =>{
+    console.log(clickedPointDate)
+    const date = new Date(clickedPointDate)
+    const dateRange = this.setDateRange(date)
+    clickedPointDate = clickedPointDate.replace(/-/g, '')
+    let clickedPointDateTomorrow = (parseInt(clickedPointDate)+1).toString()
+    axios.get(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
       .then( (response) => {
-        this.setState({articleList:this.sortNewsArticles(response.data.articles, this.state.targetCompany.name)})
+        console.log(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
+        console.log(response.data.response.docs)
+        let articleList = []
+        response.data.response.docs.forEach((article)=>{
+          articleList.push({
+            headline: article.headline.main,
+            snippet: article.snippet,
+            pubDate: article.pub_date,
+            url: article.web_url,
+          })
+        })
+        // this.setState({articleList:this.sortNewsArticles(articleList, this.state.targetCompany.name)})
+        this.setState({articleList:articleList})
       })
       .catch( (error) => {
         // handle error
+        window.alert("Error retrieving articles");
         console.log(error);
       })
-      .then( () =>{
-        // always executed
-      })
+  }
+
+  formatDate = (date) => {
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month
+    if (day.length < 2) day = '0' + day
+
+    return year+month+day
+  }
+
+  setDateRange = (date) => {
+    let yesterday = new Date(date)
+    let tomorrow = new Date(date)
+    yesterday.setDate(yesterday.getDate()-0)
+    console.log(yesterday)
+    tomorrow.setDate(tomorrow.getDate()+2)
+    console.log(tomorrow)
+    let output = {
+      beginDate: this.formatDate(yesterday),
+      endDate: this.formatDate(tomorrow),
+    }
+    return output
   }
 
   generateChart = (dates, name, stockValues) => {
@@ -101,23 +161,23 @@ class App extends Component {
                 // backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: stockValues,
-                radius: 0,
+                radius: dates.map(element => element * 0)
             }]
         },
         // Configuration options go here
         options: {
           onClick: function (event){
             let clickedPoint = this.getElementsAtXAxis(event)
-            let clickedPointIndex
-            let clickedPointDate
             if (clickedPoint.length > 0){
-              clickedPointIndex = clickedPoint[0]._index
-              clickedPointDate = dates[clickedPointIndex]
+              let clickedPointIndex = clickedPoint[0]._index
+              let clickedPointDate = dates[clickedPointIndex]
+              appjs.setNewsArticlesState(clickedPointDate)
             }
-            appjs.setNewsArticlesState(clickedPointDate)
           },
           onHover: function(event){
             let hoverPoint = this.getElementsAtXAxis(event)
+            let hoverPointIndex = hoverPoint[0]._index
+            appjs.radiusSelect(this, hoverPointIndex, dates)
           },
           legend:{
             display:false
@@ -126,6 +186,15 @@ class App extends Component {
     })
     //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
     this.setState({chartInstance: chart})
+  }
+
+  radiusSelect = (chart, index, dates) => {
+    // console.log(index)
+    let radiusArray = dates.map(element => element * 0)
+    radiusArray[index] = 3
+    chart.data.datasets[0].radius = radiusArray
+    // chart.data.datasets[0].radius[index] = 3
+    chart.update();
   }
 
   selectTargetCompany = (event) => {
@@ -165,6 +234,7 @@ class App extends Component {
         <Graph targetCompany = {this.state.targetCompany} />
 
         <ArticleList articleList = {this.state.articleList} />
+        {/*<InstructionsModal />*/}
       </div>
     )
   }

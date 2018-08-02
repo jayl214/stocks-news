@@ -23,9 +23,6 @@ class Searchbar extends Component {
         // handle error
         console.log(error);
       })
-      .then( () =>{
-        // always executed
-      })
   }
 
   searchbarSearch = (event) => {
@@ -55,7 +52,9 @@ class Searchbar extends Component {
     const fuse = new Fuse(companyList, fuseOptions); // "list" is the item array
     let fuzzySearchResults = fuse.search(input)
     //top 5 results only
-    fuzzySearchResults.length = 5
+    if (fuzzySearchResults.length>5){
+      fuzzySearchResults.length = 5
+    }
     return fuzzySearchResults
   }
 
@@ -73,6 +72,7 @@ class Searchbar extends Component {
 
   isSuggestionsActive = () => {
     if(this.state.searchbarSuggestions.length>0){
+      console.log(this.state.searchbarSuggestions)
       return 'visible'
     }else{
       return 'hidden'

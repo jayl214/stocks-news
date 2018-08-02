@@ -1,0 +1,13 @@
+.modal{
+  text-align: left;
+  font-size: .75rem;
+  width: 20vh;
+  border: $border-light;
+  border-radius: .5rem;
+  padding: .5rem 1rem 0.5rem 1rem;
+  background-color: rgba(251,255,0,.3);
+  border-color: rgba(255,200,0,.4);
+  p{
+    margin : 0;
+  }
+}

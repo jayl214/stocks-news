@@ -57,3 +57,15 @@
       background-color: rgba(160, 160, 160, 0.15); }
     .btn-group-timeRange .btn:hover {
       font-weight: bold; }
+
+.modal {
+  text-align: left;
+  font-size: .75rem;
+  width: 20vh;
+  border: 1px solid rgba(160, 160, 160, 0.5);
+  border-radius: .5rem;
+  padding: .5rem 1rem 0.5rem 1rem;
+  background-color: rgba(251, 255, 0, 0.3);
+  border-color: rgba(255, 200, 0, 0.4); }
+  .modal p {
+    margin: 0; }
