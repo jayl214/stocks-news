@@ -92,15 +92,15 @@ class App extends Component {
 
   //NY Times API
   setNewsArticlesState = (clickedPointDate) =>{
-    console.log(clickedPointDate)
+    // console.log(clickedPointDate)
     const date = new Date(clickedPointDate)
     const dateRange = this.setDateRange(date)
     clickedPointDate = clickedPointDate.replace(/-/g, '')
     let clickedPointDateTomorrow = (parseInt(clickedPointDate)+1).toString()
     axios.get(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
       .then( (response) => {
-        console.log(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
-        console.log(response.data.response.docs)
+        // console.log(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
+        // console.log(response.data.response.docs)
         let articleList = []
         response.data.response.docs.forEach((article)=>{
           articleList.push({
@@ -136,9 +136,7 @@ class App extends Component {
     let yesterday = new Date(date)
     let tomorrow = new Date(date)
     yesterday.setDate(yesterday.getDate()-0)
-    console.log(yesterday)
     tomorrow.setDate(tomorrow.getDate()+2)
-    console.log(tomorrow)
     let output = {
       beginDate: this.formatDate(yesterday),
       endDate: this.formatDate(tomorrow),
