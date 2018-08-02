@@ -58,6 +58,9 @@
     .btn-group-timeRange .btn:hover {
       font-weight: bold; }
 
+#stockChart {
+  cursor: pointer; }
+
 .modal {
   text-align: left;
   font-size: .75rem;
