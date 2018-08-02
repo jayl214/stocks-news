@@ -92,7 +92,7 @@ class App extends Component {
 
   //NY Times API
   setNewsArticlesState = (clickedPointDate) =>{
-    // console.log(clickedPointDate)
+    console.log(clickedPointDate)
     const date = new Date(clickedPointDate)
     const dateRange = this.setDateRange(date)
     clickedPointDate = clickedPointDate.replace(/-/g, '')
