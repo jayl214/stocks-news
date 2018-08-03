@@ -58,10 +58,10 @@ class App extends Component {
   sortNewsArticles = (allArticles, searchParameters) =>{
     const fuseOptions = {
       shouldSort: true,
-      // threshold: .99,
+      threshold: 1,
       location: 0,
       distance: 100,
-      maxPatternLength: 32,
+      maxPatternLength: 1000,
       minMatchCharLength: 1,
       keys: [
         "headline",
@@ -94,8 +94,9 @@ class App extends Component {
     const dateRange = this.setDateRange(date)
     clickedPointDate = clickedPointDate.replace(/-/g, '')
     let clickedPointDateTomorrow = (parseInt(clickedPointDate)+1).toString()
-    axios.get(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
+    axios.get(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name+' shares stocks'}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
       .then( (response) => {
+        console.log(response.data.response.docs)
         let articleList = []
         response.data.response.docs.forEach((article)=>{
           articleList.push({
@@ -105,6 +106,7 @@ class App extends Component {
             url: article.web_url,
           })
         })
+        // let sortedArticleList = this.sortNewsArticles(articleList, this.state.targetCompany.name+' shares stocks')
         this.setState({articleList:articleList})
       })
       .catch( (error) => {
