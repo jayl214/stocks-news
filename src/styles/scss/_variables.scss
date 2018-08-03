@@ -20,6 +20,10 @@ $font3: 'Chivo', sans-serif;
   font-family: $font3
 }
 
+@mixin font2{
+  font-family: $font2
+}
+
 $border-light: 1px solid rgba(160, 160, 160, .5);
 
 

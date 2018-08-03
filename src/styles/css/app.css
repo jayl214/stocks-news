@@ -7,6 +7,10 @@
   font-family: "Fira Sans", sans-serif;
   font-style: italic; }
 
+.iex-blurb {
+  font-family: "Chivo", sans-serif;
+  font-size: .75rem; }
+
 .searchbar {
   display: block; }
   .searchbar .searchbar-input {

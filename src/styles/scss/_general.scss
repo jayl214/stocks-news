@@ -4,3 +4,8 @@
     @include font1
   }
 }
+
+  .iex-blurb{
+    @include font3;
+    font-size: .75rem;
+  }

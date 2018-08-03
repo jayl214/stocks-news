@@ -42,11 +42,8 @@ class App extends Component {
         this.generateChart(dates, name, stockValues)
       })
       .catch( (error) => {
-        // handle error
+        window.alert("Error retrieving stock data");
         console.log(error);
-      })
-      .then( () =>{
-        // always executed
       })
   }
 
@@ -99,8 +96,6 @@ class App extends Component {
     let clickedPointDateTomorrow = (parseInt(clickedPointDate)+1).toString()
     axios.get(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
       .then( (response) => {
-        // console.log(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
-        // console.log(response.data.response.docs)
         let articleList = []
         response.data.response.docs.forEach((article)=>{
           articleList.push({
@@ -110,7 +105,6 @@ class App extends Component {
             url: article.web_url,
           })
         })
-        // this.setState({articleList:this.sortNewsArticles(articleList, this.state.targetCompany.name)})
         this.setState({articleList:articleList})
       })
       .catch( (error) => {
@@ -156,10 +150,10 @@ class App extends Component {
             labels: dates,
             datasets: [{
                 label: name,
-                // backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: stockValues,
-                radius: dates.map(element => element * 0)
+                radius: 0,
+                pointHoverRadius : 5,
             }]
         },
         // Configuration options go here
@@ -172,30 +166,21 @@ class App extends Component {
               appjs.setNewsArticlesState(clickedPointDate)
             }
           },
-          onHover: function(event){
-            let hoverPoint = this.getElementsAtXAxis(event)
-            let hoverPointIndex = hoverPoint[0]._index
-            appjs.radiusSelect(this, hoverPointIndex, dates)
-          },
           legend:{
             display:false
           },
+          hover:{
+            mode: 'index',
+            intersect: false
+          }
         }
     })
     //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
     this.setState({chartInstance: chart})
   }
 
-  radiusSelect = (chart, index, dates) => {
-    // console.log(index)
-    let radiusArray = dates.map(element => element * 0)
-    radiusArray[index] = 3
-    chart.data.datasets[0].radius = radiusArray
-    // chart.data.datasets[0].radius[index] = 3
-    chart.update();
-  }
-
   selectTargetCompany = (event) => {
+    this.setState({articleList:[]})
     let targetTicker = event.target.getAttribute("ticker")
     let targetName = event.target.getAttribute("name")
     this.setState(
@@ -229,10 +214,14 @@ class App extends Component {
         </header>
 
         <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
+        <p className="iex-blurb">
+          Stock data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
+        </p>
         <Graph targetCompany = {this.state.targetCompany} />
 
         <ArticleList articleList = {this.state.articleList} />
         {/*<InstructionsModal />*/}
+
       </div>
     )
   }
