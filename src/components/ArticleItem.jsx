@@ -5,7 +5,7 @@ class ArticleItem extends Component {
   render() {
     let articleItem = this.props.articleItem
     return (
-      <li>
+      <li className="article-item">
         <h4>{articleItem.headline}</h4>
         <p>{articleItem.snippet}</p>
         <p>{articleItem.pubDate}</p>

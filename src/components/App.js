@@ -131,12 +131,13 @@ class App extends Component {
   setDateRange = (date) => {
     let yesterday = new Date(date)
     let tomorrow = new Date(date)
-    yesterday.setDate(yesterday.getDate()-0)
+    yesterday.setDate(yesterday.getDate()+1)
     tomorrow.setDate(tomorrow.getDate()+2)
     let output = {
       beginDate: this.formatDate(yesterday),
       endDate: this.formatDate(tomorrow),
     }
+    console.log(output)
     return output
   }
 
@@ -156,6 +157,7 @@ class App extends Component {
                 data: stockValues,
                 radius: 0,
                 pointHoverRadius : 5,
+                lineTension:0
             }]
         },
         // Configuration options go here
@@ -169,12 +171,25 @@ class App extends Component {
             }
           },
           legend:{
-            display:false
+            display:false,
           },
           hover:{
             mode: 'index',
-            intersect: false
-          }
+            intersect: false,
+          },
+          tooltips:{
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(tooltipItem) {
+                return appjs.state.targetCompany.ticker + ': ' + Number(tooltipItem.yLabel)+" Click to get news";
+              }
+            }
+          },
+          maintainAspectRatio: false,
+          // tooltips: {
+          //   mode: 'nearest',
+          // }
         }
     })
     //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
@@ -210,7 +225,7 @@ class App extends Component {
       <div className="app">
         <header className="app-header">
           <h1 className="app-intro">
-            Search a Company
+            Stocks-News
           </h1>
           <Searchbar selectTargetCompany = {this.selectTargetCompany} />
         </header>

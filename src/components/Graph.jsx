@@ -6,7 +6,9 @@ class Graph extends Component {
     return (
       <div className = "chartContainer">
         <h2>{this.props.targetCompany.name}</h2>
-        <canvas id="stockChart" width="100%" height="50vh"></canvas>
+        <div className = "chart-container">
+          <canvas id="stockChart" width="100%" height="50vh"></canvas>
+        </div>
       </div>
     )
   }
