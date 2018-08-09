@@ -3,23 +3,29 @@
   display: inline-block;
   .btn{
     height: 2rem;
-    border: $border-light;
+    border: none;
     border-right: none;
     outline: none;
     cursor: pointer;
+    color: rgba(1,1,1,0.7);
     &:first-of-type{
-      border-radius: .3rem 0 0 .3rem;
+      // border-radius: .3rem 0 0 .3rem;
     }
     &:last-of-type{
-      border-right: $border-light;
-      border-radius: 0 .3rem .3rem 0;
+      // border-right: $border-light;
+      // border-radius: 0 .3rem .3rem 0;
     }
     &.btn-active{
       font-weight: bold;
-      background-color: rgba(160,160,160,.15);
+      // border-bottom: $border-light;
+      border-bottom: 2px solid black;
+      // background-color: rgba(160,160,160,.15);
+      color: black;
     }
     &:hover{
-      font-weight: bold;
+      // font-weight: bold;
+      border-bottom: 2px solid black;
+      color: black;
     }
   }
 }

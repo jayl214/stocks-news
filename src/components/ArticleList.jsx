@@ -6,7 +6,7 @@ class ArticleList extends Component {
   render() {
     return (
       <div>
-        <ul>
+        <ul className="article-list">
           {this.props.articleList.map((articleItem, index)=>{
             return <ArticleItem articleItem = {articleItem} key = {index} />
           }) }

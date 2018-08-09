@@ -6,9 +6,18 @@
     width: 80%;
     height: 2rem;
     padding: 0 1rem;
-    border-radius: .5rem;
-    border: $border-light;
+    // border-radius: .5rem;
+    // border: $border-light;
+    // text-decoration: underline;
+    border: none;
+    border-bottom: 2px solid black;
+    color: rgba(1,1,1,0.5);
     outline: none;
+    &:focus{
+      color: black;
+      // font-weight: bold;
+      border-bottom: 2px solid black;
+    }
   }
   .searchbar-suggestions{
     @include font3

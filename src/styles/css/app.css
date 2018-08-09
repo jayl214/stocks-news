@@ -19,9 +19,13 @@
     width: 80%;
     height: 2rem;
     padding: 0 1rem;
-    border-radius: .5rem;
-    border: 1px solid rgba(160, 160, 160, 0.5);
+    border: none;
+    border-bottom: 2px solid black;
+    color: rgba(1, 1, 1, 0.5);
     outline: none; }
+    .searchbar .searchbar-input:focus {
+      color: black;
+      border-bottom: 2px solid black; }
   .searchbar .searchbar-suggestions {
     font-family: "Chivo", sans-serif;
     position: absolute;
@@ -47,20 +51,18 @@
   display: inline-block; }
   .btn-group-timeRange .btn {
     height: 2rem;
-    border: 1px solid rgba(160, 160, 160, 0.5);
+    border: none;
     border-right: none;
     outline: none;
-    cursor: pointer; }
-    .btn-group-timeRange .btn:first-of-type {
-      border-radius: .3rem 0 0 .3rem; }
-    .btn-group-timeRange .btn:last-of-type {
-      border-right: 1px solid rgba(160, 160, 160, 0.5);
-      border-radius: 0 .3rem .3rem 0; }
+    cursor: pointer;
+    color: rgba(1, 1, 1, 0.7); }
     .btn-group-timeRange .btn.btn-active {
       font-weight: bold;
-      background-color: rgba(160, 160, 160, 0.15); }
+      border-bottom: 2px solid black;
+      color: black; }
     .btn-group-timeRange .btn:hover {
-      font-weight: bold; }
+      border-bottom: 2px solid black;
+      color: black; }
 
 .chart-container {
   position: relative;
@@ -80,3 +82,23 @@
   border-color: rgba(255, 200, 0, 0.4); }
   .modal p {
     margin: 0; }
+
+.article-list {
+  padding: 0;
+  list-style-type: none;
+  text-align: left; }
+
+.article-item {
+  border-bottom: 1px solid rgba(160, 160, 160, 0.5);
+  cursor: pointer; }
+  .article-item a {
+    color: black;
+    text-decoration: none; }
+    .article-item a .snippet {
+      color: rgba(1, 1, 1, 0.7); }
+    .article-item a:hover .headline {
+      text-decoration: underline; }
+    .article-item a:hover .snippet {
+      color: black; }
+    .article-item a:last-of-type {
+      border-bottom: none; }

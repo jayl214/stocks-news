@@ -6,10 +6,12 @@ class ArticleItem extends Component {
     let articleItem = this.props.articleItem
     return (
       <li className="article-item">
-        <h4>{articleItem.headline}</h4>
-        <p>{articleItem.snippet}</p>
-        <p>{articleItem.pubDate}</p>
-        <a target="_blank" href={articleItem.url}>{articleItem.url}</a>
+        <a target="_blank" href={articleItem.url}>
+          <h4 className="headline">{articleItem.headline}</h4>
+          <p className="snippet">{articleItem.snippet}</p>
+          {/*<p>{articleItem.pubDate}</p>
+          <a target="_blank" href={articleItem.url}>{articleItem.url}</a>*/}
+        </a>
       </li>
     )
   }

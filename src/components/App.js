@@ -229,16 +229,13 @@ class App extends Component {
           </h1>
           <Searchbar selectTargetCompany = {this.selectTargetCompany} />
         </header>
-
         <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
         <p className="iex-blurb">
           Stock data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
         </p>
         <Graph targetCompany = {this.state.targetCompany} />
-
         <ArticleList articleList = {this.state.articleList} />
         {/*<InstructionsModal />*/}
-
       </div>
     )
   }
