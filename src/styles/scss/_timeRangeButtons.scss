@@ -8,22 +8,12 @@
     outline: none;
     cursor: pointer;
     color: rgba(1,1,1,0.7);
-    &:first-of-type{
-      // border-radius: .3rem 0 0 .3rem;
-    }
-    &:last-of-type{
-      // border-right: $border-light;
-      // border-radius: 0 .3rem .3rem 0;
-    }
     &.btn-active{
-      font-weight: bold;
-      // border-bottom: $border-light;
+      font-weight: bold;;
       border-bottom: 2px solid black;
-      // background-color: rgba(160,160,160,.15);
       color: black;
     }
     &:hover{
-      // font-weight: bold;
       border-bottom: 2px solid black;
       color: black;
     }

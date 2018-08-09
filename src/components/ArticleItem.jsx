@@ -9,8 +9,6 @@ class ArticleItem extends Component {
         <a target="_blank" href={articleItem.url}>
           <h4 className="headline">{articleItem.headline}</h4>
           <p className="snippet">{articleItem.snippet}</p>
-          {/*<p>{articleItem.pubDate}</p>
-          <a target="_blank" href={articleItem.url}>{articleItem.url}</a>*/}
         </a>
       </li>
     )
