@@ -3,12 +3,30 @@ import axios from 'axios' //promise based ajax
 import Fuse from 'fuse.js' //fuzzy searcher
 import Suggestion from './Suggestion.jsx'
 
-class Searchbar extends Component {
+import { connect } from "react-redux";
+import { setAllCompanyTickersAndNames } from "../js/actions/index";
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setAllCompanyTickersAndNames: companyTickersAndNames => dispatch(setAllCompanyTickersAndNames(companyTickersAndNames)),
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    companyTickersAndNames: state.companyTickersAndNames
+  };
+};
+
+class ConnectedSearchbar extends Component {
 
   state = {
+    searchbarInput: '',
     searchbarSuggestions: [],
-    companyTickersAndNames: [],
+  //   companyTickersAndNames: [],
   }
+
 
   componentDidMount(){
     this.getCompanyTickersAndNames()
@@ -17,10 +35,9 @@ class Searchbar extends Component {
   getCompanyTickersAndNames = () => {
     axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
       .then( (response) => {
-        this.setState({companyTickersAndNames:response.data})
+        this.props.setAllCompanyTickersAndNames(response.data);
       })
       .catch( (error) => {
-        // handle error
         console.log(error);
       })
   }
@@ -31,7 +48,7 @@ class Searchbar extends Component {
       this.hideSuggestions()
     }else{
       const input = event.target.value
-      let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.state.companyTickersAndNames)
+      let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.props.companyTickersAndNames)
       this.setState({searchbarSuggestions:searchbarSuggestions})
     }
   }
@@ -72,7 +89,6 @@ class Searchbar extends Component {
 
   isSuggestionsActive = () => {
     if(this.state.searchbarSuggestions.length>0){
-      console.log(this.state.searchbarSuggestions)
       return 'visible'
     }else{
       return 'hidden'
@@ -100,4 +116,5 @@ class Searchbar extends Component {
 
 }
 
+const Searchbar = connect(mapStateToProps, mapDispatchToProps)(ConnectedSearchbar)
 export default Searchbar;
