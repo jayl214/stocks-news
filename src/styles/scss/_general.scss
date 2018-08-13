@@ -2,6 +2,9 @@
   .app-intro{
     font-size: 200%;
     @include font1
+    mark{
+      // background-color: rgba(255,236,0,1);
+    }
   }
 }
 

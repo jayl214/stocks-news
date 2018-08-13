@@ -153,7 +153,7 @@ class App extends Component {
             labels: dates,
             datasets: [{
                 label: name,
-                borderColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgba(255,236,0,1)',
                 data: stockValues,
                 radius: 0,
                 pointHoverRadius : 5,
