@@ -3,8 +3,8 @@ import axios from 'axios' //promise based ajax
 import Fuse from 'fuse.js' //fuzzy searcher
 import Suggestion from './Suggestion.jsx'
 
-import { connect } from "react-redux";
-import { setAllCompanyTickersAndNames } from "../js/actions/index";
+import { connect } from "react-redux"
+import { setAllCompanyTickersAndNames } from "../js/actions/index"
 
 
 const mapDispatchToProps = dispatch => {
@@ -22,7 +22,6 @@ const mapStateToProps = state => {
 class ConnectedSearchbar extends Component {
 
   state = {
-    searchbarInput: '',
     searchbarSuggestions: [],
   //   companyTickersAndNames: [],
   }
@@ -80,6 +79,10 @@ class ConnectedSearchbar extends Component {
     let targetName = event.target.getAttribute("name")
     this.setState(
       {
+        target:{
+          name: targetName,
+          ticker: targetTicker
+        },
         targetTicker: targetTicker,
         targetName: targetName,
         searchbarSuggestions: [],

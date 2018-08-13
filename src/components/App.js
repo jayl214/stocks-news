@@ -19,8 +19,8 @@ class App extends Component {
       name: '',
       ticker: ''
     },
-    targetTicker: '',
-    targetName: '',
+    // targetTicker: '',
+    // targetName: '',
     timeRange: '1m',
     articleList: [],
     appjs: this

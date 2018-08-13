@@ -9,12 +9,12 @@ const initialState = {
   //   },
   // targetTicker: '',
   // targetName: '',
-  // timeRange: '1m',
   // articleList: [],
   // appjs: this
   // // chartInstance: {},
   // searchbarSuggestions: [],
   companyTickersAndNames: [],
+  timeRange: '',
 };
 
 const enhancer = window.__REDUX_DEVTOOLS_EXTENSION__ &&
