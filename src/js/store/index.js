@@ -2,20 +2,18 @@ import { createStore } from "redux";
 import rootReducer from "../reducers/index";
 
 
-const initialState = {
-  // targetCompany:{
-  //     name: '',
-  //     ticker: ''
-  //   },
-  // targetTicker: '',
-  // targetName: '',
-  // articleList: [],
-  // appjs: this
-  // // chartInstance: {},
-  // searchbarSuggestions: [],
-  companyTickersAndNames: [],
-  timeRange: '',
-};
+// const initialState = {
+//   targetCompany:{
+//       name: '',
+//       symbol: ''
+//     },
+//   // articleList: [],
+//   // appjs: this
+//   chartInstance: {},
+//   // searchbarSuggestions: [],
+//   companyTickersAndNames: [],
+//   timeRange: '1m',
+// };
 
 const enhancer = window.__REDUX_DEVTOOLS_EXTENSION__ &&
   window.__REDUX_DEVTOOLS_EXTENSION__();
@@ -25,6 +23,6 @@ if (!enhancer) {
     'https://github.com/zalmoxisus/redux-devtools-extension#installation')
 }
 
-const store = createStore(rootReducer, initialState, enhancer)
+const store = createStore(rootReducer, enhancer)
 
 export default store;

@@ -3,6 +3,7 @@ import axios from 'axios' //promise based ajax
 import Fuse from 'fuse.js' //fuzzy searcher
 import Suggestion from './Suggestion.jsx'
 
+//redux
 import { connect } from "react-redux"
 import { setAllCompanyTickersAndNames } from "../js/actions/index"
 

@@ -89,7 +89,6 @@ class App extends Component {
 
   //NY Times API
   setNewsArticlesState = (clickedPointDate) =>{
-    console.log(clickedPointDate)
     const date = new Date(clickedPointDate)
     const dateRange = this.setDateRange(date)
     clickedPointDate = clickedPointDate.replace(/-/g, '')
@@ -153,7 +152,7 @@ class App extends Component {
             labels: dates,
             datasets: [{
                 label: name,
-                borderColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgba(255,236,0,1)',
                 data: stockValues,
                 radius: 0,
                 pointHoverRadius : 5,
@@ -187,29 +186,27 @@ class App extends Component {
             }
           },
           maintainAspectRatio: false,
-          // tooltips: {
-          //   mode: 'nearest',
-          // }
         }
     })
     //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
     this.setState({chartInstance: chart})
   }
 
-  selectTargetCompany = (event) => {
-    this.setState({articleList:[]})
-    let targetTicker = event.target.getAttribute("ticker")
-    let targetName = event.target.getAttribute("name")
-    this.setState(
-      {
-        targetCompany:{
-          name: targetName,
-          ticker: targetTicker
-        },
-        searchbarSuggestions: [],
-      }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
-    )
-  }
+  // selectTargetCompany = (event) => {
+  //   // console.log('run')
+  //   this.setState({articleList:[]})
+  //   let targetTicker = event.target.getAttribute("ticker")
+  //   let targetName = event.target.getAttribute("name")
+  //   this.setState(
+  //     {
+  //       targetCompany:{
+  //         name: targetName,
+  //         ticker: targetTicker
+  //       },
+  //       searchbarSuggestions: [],
+  //     }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
+  //   )
+  // }
 
   selectTimeRange = (event) => {
     let timeRange = event.target.getAttribute("name")
