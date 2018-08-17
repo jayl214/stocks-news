@@ -58,18 +58,6 @@ class Searchbar extends Component {
     return fuzzySearchResults
   }
 
-  selectSuggestion = (event) => {
-    let targetTicker = event.target.getAttribute("ticker")
-    let targetName = event.target.getAttribute("name")
-    this.setState(
-      {
-        targetTicker: targetTicker,
-        targetName: targetName,
-        searchbarSuggestions: [],
-      }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
-    )
-  }
-
   isSuggestionsActive = () => {
     if(this.state.searchbarSuggestions.length>0){
       console.log(this.state.searchbarSuggestions)
@@ -78,6 +66,7 @@ class Searchbar extends Component {
       return 'hidden'
     }
   }
+
   hideSuggestions = (event) => {
     this.setState({
       searchbarSuggestions: [],

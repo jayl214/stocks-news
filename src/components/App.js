@@ -19,18 +19,15 @@ class App extends Component {
       name: '',
       ticker: ''
     },
-    targetTicker: '',
-    targetName: '',
     timeRange: '1m',
     articleList: [],
-    appjs: this
+    // appjs: this
     // chartInstance: {},
   }
 
   chartNewData = (ticker, name, timeRange) => {
     axios.get(`https://api.iextrading.com/1.0/stock/${ticker}/chart/${timeRange}`)
       .then( (response) => {
-        console.log(response.data)
         let stockValues = []
         let dates = []
         response.data.forEach((day) => {
@@ -212,6 +209,7 @@ class App extends Component {
   }
 
   selectTimeRange = (event) => {
+    this.setState({articleList:[]})
     let timeRange = event.target.getAttribute("name")
     this.setState(
       {
