@@ -75,21 +75,21 @@ class ConnectedSearchbar extends Component {
     return fuzzySearchResults
   }
 
-  selectSuggestion = (event) => {
-    let targetTicker = event.target.getAttribute("ticker")
-    let targetName = event.target.getAttribute("name")
-    this.setState(
-      {
-        target:{
-          name: targetName,
-          ticker: targetTicker
-        },
-        targetTicker: targetTicker,
-        targetName: targetName,
-        searchbarSuggestions: [],
-      }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
-    )
-  }
+  // selectSuggestion = (event) => {
+  //   let targetTicker = event.target.getAttribute("ticker")
+  //   let targetName = event.target.getAttribute("name")
+  //   this.setState(
+  //     {
+  //       target:{
+  //         name: targetName,
+  //         ticker: targetTicker
+  //       },
+  //       targetTicker: targetTicker,
+  //       targetName: targetName,
+  //       searchbarSuggestions: [],
+  //     }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
+  //   )
+  // }
 
   isSuggestionsActive = () => {
     if(this.state.searchbarSuggestions.length>0){
@@ -98,6 +98,7 @@ class ConnectedSearchbar extends Component {
       return 'hidden'
     }
   }
+
   hideSuggestions = (event) => {
     this.setState({
       searchbarSuggestions: [],
