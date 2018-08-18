@@ -31,6 +31,9 @@ gem 'rack-cors'
 # JSON web tokens for uAuth
 gem 'jwt'
 
+# A simple, standardized way to build and use Service Objects (aka Commands) in Ruby
+gem 'simple_command'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

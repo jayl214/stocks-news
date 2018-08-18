@@ -1,6 +1,7 @@
 module Api::V1
   class UsersController < ApplicationController
-    before_action :set_user, only: [:show, :update, :destroy]
+    skip_before_action :authenticate_request, only: %i[login register]
+
 
     # GET /users
     # def index
@@ -25,6 +26,16 @@ module Api::V1
      end
     end
 
+    def login
+      authenticate params[:email], params[:password]
+    end
+
+    def test
+      render json: {
+        message: 'You have passed authentication and authorization test'
+      }
+    end
+
     # PATCH/PUT /users/1
     # def update
     #   if @user.update(user_params)
@@ -46,6 +57,18 @@ module Api::V1
           :email,
           :password
         )
+      end
+      def authenticate(email, password)
+        command = AuthenticateUser.call(email, password)
+
+        if command.success?
+          render json: {
+            access_token: command.result,
+            message: 'Login Successful'
+          }
+        else
+          render json: { error: command.errors }, status: :unauthorized
+        end
       end
   end
 end
