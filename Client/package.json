@@ -2,6 +2,11 @@
   "name": "stocks-news",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3001"
+    }
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
