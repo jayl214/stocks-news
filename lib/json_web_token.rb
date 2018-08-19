@@ -6,6 +6,7 @@ class JsonWebToken
       payload[:exp] = exp.to_i
 
        # this encodes the user data(payload) with our secret key
+       # Rails automatically provides secret_key_base at config/credentials
       JWT.encode(payload, Rails.application.credentials.secret_key_base)
     end
 

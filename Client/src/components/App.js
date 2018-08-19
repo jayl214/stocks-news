@@ -218,10 +218,101 @@ class App extends Component {
     )
   }
 
+  toggleLoginModalStatus = () => {
+    return (this.state.loginModalStatus ? this.setState({loginModalStatus:false}) : this.setState({loginModalStatus:true}) )
+  }
+  toggleRegisterModalStatus = () => {
+    return (this.state.registerModalStatus ? this.setState({registerModalStatus:false}) : this.setState({registerModalStatus:true}) )
+  }
+
+  submitLoginForm = e =>{
+    e.preventDefault()
+    axios.post("http://localhost:3001/api/v1/auth/login", {
+      email: this.state.loginEmail,
+      password: this.state.loginPassword
+    })
+    .then( (response) => {
+      document.cookie = `Auth=${response.data.access_token}`
+      alert(document.cookie)
+      console.log(response.data)
+    })
+    .catch( (error) => {
+      window.alert("Login Error");
+      console.log(error);
+    })
+  }
+
+  submitRegisterForm = e =>{
+    e.preventDefault()
+    axios.post("http://localhost:3001/api/v1/auth/register", {
+      name: this.state.registerName,
+      email: this.state.registerEmail,
+      password: this.state.registerPassword
+    })
+    .then( (response) => {
+      console.log(response.data)
+    })
+    .catch( (error) => {
+      window.alert("Registration Error");
+      console.log(error);
+    })
+  }
+  handleInputChange = e => {
+    this.setState({[e.target.name]: e.target.value})
+    console.log(this.state)
+  }
+
   render() {
     return (
       <div className="app">
         <header className="app-header">
+          <button onClick={this.toggleLoginModalStatus}>Login</button>
+          <button onClick={this.toggleRegisterModalStatus}>Register</button>
+
+          <div className={`modal-login ${this.state.loginModalStatus}`}>
+            <h2>Login</h2>
+            <form onSubmit={this.submitLoginForm}>
+              <input
+                name="loginEmail"
+                type="email"
+                placeholder="email..."
+                value={this.state.loginEmail}
+                onChange={this.handleInputChange}/>
+              <input
+                name="loginPassword"
+                type="password"
+                placeholder="password..."
+                value={this.state.loginPassword}
+                onChange={this.handleInputChange} />
+              <button>Login</button>
+            </form>
+          </div>
+
+          <div className={`modal-register ${this.state.registerModalStatus}`}>
+            <h2>Register</h2>
+            <form onSubmit={this.submitRegisterForm}>
+              <input
+                name="registerName"
+                type="text"
+                placeholder="name..."
+                value={this.state.registerName}
+                onChange={this.handleInputChange} />
+              <input
+                name="registerEmail"
+                type="email"
+                placeholder="email..."
+                value={this.state.registerEmail}
+                onChange={this.handleInputChange} />
+              <input
+                name="registerPassword"
+                type="password"
+                placeholder="password..."
+                value={this.state.registerPassword}
+                onChange={this.handleInputChange} />
+              <button>Register</button>
+            </form>
+          </div>
+
           <h1 className="app-intro">
             Stocks-News
           </h1>
