@@ -21,8 +21,38 @@ class App extends Component {
     },
     timeRange: '1m',
     articleList: [],
+    userName: '',
     // appjs: this
     // chartInstance: {},
+  }
+
+  componentDidMount = () =>{
+    if(document.cookie){
+      this.setState({
+        jwt: document.cookie.slice(5)
+      })
+      this.getUserName()
+    }
+  }
+  // componentDidUpdate = () => {
+  //   if(document.cookie){
+  //     this.setState({
+  //       jwt: document.cookie.slice(5)
+  //     })
+  //     this.getUserName()
+  //   }
+  // }
+
+  getUserName = () => {
+    axios.get('api/v1/user', {headers:{
+      Authorization: document.cookie.slice(5)
+    }})
+    .then((response)=>{
+      console.log(response)
+      this.setState({
+        userName: response.data.name
+      })
+    })
   }
 
   chartNewData = (ticker, name, timeRange) => {
@@ -225,6 +255,18 @@ class App extends Component {
     return (this.state.registerModalStatus ? this.setState({registerModalStatus:false}) : this.setState({registerModalStatus:true}) )
   }
 
+  addCompanyToPortfolio = e =>{
+    axios.post("api/v1/add_company",{
+      name: this.state.targetCompany.name,
+      symbol: this.state.targetCompany.ticker
+    },{headers:{
+      Authorization: this.state.jwt
+    }})
+    .then((response)=>{
+      console.log(response.data)
+    })
+  }
+
   submitLoginForm = e =>{
     e.preventDefault()
     axios.post("api/v1/auth/login", {
@@ -233,6 +275,9 @@ class App extends Component {
     })
     .then( (response) => {
       document.cookie = `Auth=${response.data.access_token}`
+      this.setState({
+        jwt: document.cookie.slice(5)
+      })
       alert(document.cookie)
       console.log(response.data)
     })
@@ -265,9 +310,10 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <div>Hello {this.state.userName}</div>
         <header className="app-header">
           {/*<button onClick={this.toggleLoginModalStatus}>Login</button>
-          <button onClick={this.toggleRegisterModalStatus}>Register</button>
+          <button onClick={this.toggleRegisterModalStatus}>Register</button>*/}
 
           <div className={`modal-login ${this.state.loginModalStatus}`}>
             <h2>Login</h2>
@@ -312,7 +358,7 @@ class App extends Component {
               <button>Register</button>
             </form>
           </div>
-*/}
+
           <h1 className="app-intro">
             Stocks-News
           </h1>
@@ -322,7 +368,7 @@ class App extends Component {
         <p className="iex-blurb">
           Stock data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
         </p>
-        <Graph targetCompany = {this.state.targetCompany} />
+        <Graph targetCompany = {this.state.targetCompany} addCompanyToPortfolio = {this.addCompanyToPortfolio} />
         <ArticleList articleList = {this.state.articleList} />
         {/*<InstructionsModal />*/}
       </div>

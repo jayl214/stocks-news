@@ -2,19 +2,6 @@ module Api::V1
   class UsersController < ApplicationController
     skip_before_action :authenticate_request, only: %i[login register]
 
-
-    # GET /users
-    # def index
-    #   @users = User.all
-
-    #   render json: @users
-    # end
-
-    # GET /users/1
-    # def show
-    #   render json: @user
-    # end
-
      # POST /register
     def register
       @user = User.create(user_params)
@@ -37,28 +24,19 @@ module Api::V1
       }
     end
 
-    # Check what params does exactly
+    def show
+      response = { name: @current_user.name }
+      render json: response
+    end
+
     def add_company (symbol, name)
+      puts params
       # @newCompany = Company.create(:name params[:product_id], :email params[email])
       # company(symbol, name) exists?{
       #   if NOT: create it
       # }
       # user add company
     end
-
-    # PATCH/PUT /users/1
-    # def update
-    #   if @user.update(user_params)
-    #     render json: @user
-    #   else
-    #     render json: @user.errors, status: :unprocessable_entity
-    #   end
-    # end
-
-    # DELETE /users/1
-    # def destroy
-    #   @user.destroy
-    # end
 
     private
       def user_params
