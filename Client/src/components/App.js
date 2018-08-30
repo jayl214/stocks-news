@@ -266,7 +266,7 @@ class App extends Component {
     return (
       <div className="app">
         <header className="app-header">
-          <button onClick={this.toggleLoginModalStatus}>Login</button>
+          {/*<button onClick={this.toggleLoginModalStatus}>Login</button>
           <button onClick={this.toggleRegisterModalStatus}>Register</button>
 
           <div className={`modal-login ${this.state.loginModalStatus}`}>
@@ -312,7 +312,7 @@ class App extends Component {
               <button>Register</button>
             </form>
           </div>
-
+*/}
           <h1 className="app-intro">
             Stocks-News
           </h1>
