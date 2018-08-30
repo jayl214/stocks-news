@@ -31,9 +31,19 @@ module Api::V1
     end
 
     def test
+      puts @current_user.name
       render json: {
         message: 'You have passed authentication and authorization test'
       }
+    end
+
+    # Check what params does exactly
+    def add_company (symbol, name)
+      # @newCompany = Company.create(:name params[:product_id], :email params[email])
+      # company(symbol, name) exists?{
+      #   if NOT: create it
+      # }
+      # user add company
     end
 
     # PATCH/PUT /users/1

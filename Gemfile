@@ -31,6 +31,9 @@ gem 'rack-cors'
 # JSON web tokens for uAuth
 gem 'jwt'
 
+# to simultaneously launch rails server and react app
+gem 'foreman'
+
 # A simple, standardized way to build and use Service Objects (aka Commands) in Ruby
 gem 'simple_command'
 
