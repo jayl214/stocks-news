@@ -310,7 +310,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <div>Hello {this.state.userName}</div>
+        <div>{this.state.userName}</div>
         <header className="app-header">
           {/*<button onClick={this.toggleLoginModalStatus}>Login</button>
           <button onClick={this.toggleRegisterModalStatus}>Register</button>*/}

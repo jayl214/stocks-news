@@ -31,10 +31,10 @@ module Api::V1
 
     def add_company (symbol, name)
       puts params
-      # @newCompany = Company.create(:name params[:product_id], :email params[email])
-      # company(symbol, name) exists?{
+      # if company exists?
       #   if NOT: create it
-      # }
+          # @newCompany = Company.create(:name params[:name], :symbol params[symbol])
+      # end
       # user add company
     end
 
