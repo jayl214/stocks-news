@@ -1,24 +1,27 @@
-# README
+# Stocks-News
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+I built this app because wanted to learn more about how the ups and downs of the stock market are reflected in/by major events, but couldn't find an online tool that would simply show me relevant headlines for a given company at specific dates alongside stock market data. Stock data and news articles are fetched from IEX and New York Times API's respectively.
 
-Things you may want to cover:
+visit at https://stocks-news.herokuapp.com/
 
-* Ruby version
+## Screenshots
+!["landing"](https://github.com/jayl214/stocks-news/blob/master/Client/public/docs/screenshots/landing.png)
+!["search"](https://github.com/jayl214/stocks-news/blob/master/Client/public/docs/screenshots/search.png)
+!["companySelected"](https://github.com/jayl214/stocks-news/blob/master/Client/public/docs/screenshots/companySelected.png)
+!["articleSelected"](https://github.com/jayl214/stocks-news/blob/master/Client/public/docs/screenshots/articleSelected.png)
 
-* System dependencies
 
-* Configuration
+## Dependancies:
+- React
+- Axios
+- Chart.js
+- Fuse.js
 
-* Database creation
 
-* Database initialization
+## Getting Started
+1: Install dependencies (`npm install`)
+2: Start server (`npm run start`)
+3: Go to localhost:3000
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
-
-* ...
