@@ -227,7 +227,7 @@ class App extends Component {
 
   submitLoginForm = e =>{
     e.preventDefault()
-    axios.post("http://localhost:3001/api/v1/auth/login", {
+    axios.post("api/v1/auth/login", {
       email: this.state.loginEmail,
       password: this.state.loginPassword
     })
@@ -244,7 +244,7 @@ class App extends Component {
 
   submitRegisterForm = e =>{
     e.preventDefault()
-    axios.post("http://localhost:3001/api/v1/auth/register", {
+    axios.post("api/v1/auth/register", {
       name: this.state.registerName,
       email: this.state.registerEmail,
       password: this.state.registerPassword
