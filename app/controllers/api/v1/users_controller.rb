@@ -25,15 +25,18 @@ module Api::V1
     end
 
     def show
-      response = { name: @current_user.name }
+      response = {
+        name: @current_user.name,
+      }
       render json: response
     end
 
-    def add_company (symbol, name)
-      # if !Company.find_by(symbol: params[:symbol])
-      #   @newCompany = Company.create(:name params[:name], :symbol params[symbol])
-      # end
-      # user add company
+    def add_company
+      @company = Company.find_by(symbol: params[:symbol])
+      if (@company==nil)
+        @newCompany = Company.create(symbol: params[:symbol], name: params[:name])
+      end
+      @newUserCompany = UserCompany.create(user: @current_user, company: @company)
     end
 
     private

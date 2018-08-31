@@ -275,6 +275,8 @@ class App extends Component {
     })
     .then( (response) => {
       document.cookie = `Auth=${response.data.access_token}`
+
+      this.getUserName()
       this.setState({
         jwt: document.cookie.slice(5)
       })
