@@ -30,9 +30,9 @@ module Api::V1
     end
 
     def add_company (symbol, name)
-      if !Company.find_by(symbol: params[:symbol])
-        @newCompany = Company.create(:name params[:name], :symbol params[symbol])
-      end
+      # if !Company.find_by(symbol: params[:symbol])
+      #   @newCompany = Company.create(:name params[:name], :symbol params[symbol])
+      # end
       # user add company
     end
 

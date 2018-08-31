@@ -310,7 +310,6 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <div>{this.state.userName}</div>
         <header className="app-header">
           {/*<button onClick={this.toggleLoginModalStatus}>Login</button>
           <button onClick={this.toggleRegisterModalStatus}>Register</button>*/}
@@ -362,7 +361,7 @@ class App extends Component {
           <h1 className="app-intro">
             Stocks-News
           </h1>
-          <Searchbar selectTargetCompany = {this.selectTargetCompany} />
+          <Searchbar selectTargetCompany = {this.selectTargetCompany} userName = {this.state.userName} />
         </header>
         <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
         <p className="iex-blurb">

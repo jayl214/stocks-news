@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  has_many :user_companies
-  has_many :companies, through: :user_companies, :uniq true
+  has_many :user_companies, dependent: :destroy
+  has_many :companies, -> {distinct}, through: :user_companies
 
   validates_presence_of :name, :email, :password_digest
 
