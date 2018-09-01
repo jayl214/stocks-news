@@ -22,6 +22,10 @@ class App extends Component {
     timeRange: '1m',
     articleList: [],
     userName: '',
+    userData: {
+      name: '',
+      portfolio: ''
+    }
     // appjs: this
     // chartInstance: {},
   }
@@ -31,26 +35,21 @@ class App extends Component {
       this.setState({
         jwt: document.cookie.slice(5)
       })
-      this.getUserName()
+      this.getUserData()
     }
   }
-  // componentDidUpdate = () => {
-  //   if(document.cookie){
-  //     this.setState({
-  //       jwt: document.cookie.slice(5)
-  //     })
-  //     this.getUserName()
-  //   }
-  // }
 
-  getUserName = () => {
+  getUserData = () => {
     axios.get('api/v1/user', {headers:{
       Authorization: document.cookie.slice(5)
     }})
     .then((response)=>{
       console.log(response)
       this.setState({
-        userName: response.data.name
+        userData: {
+          name: response.data.name,
+          portfolio: response.data.companies
+        }
       })
     })
   }
@@ -263,7 +262,8 @@ class App extends Component {
       Authorization: this.state.jwt
     }})
     .then((response)=>{
-      console.log(response.data)
+      console.log(response)
+      this.getUserData()
     })
   }
 
@@ -276,7 +276,7 @@ class App extends Component {
     .then( (response) => {
       document.cookie = `Auth=${response.data.access_token}`
 
-      this.getUserName()
+      this.getUserData()
       this.setState({
         jwt: document.cookie.slice(5)
       })
@@ -363,7 +363,7 @@ class App extends Component {
           <h1 className="app-intro">
             Stocks-News
           </h1>
-          <Searchbar selectTargetCompany = {this.selectTargetCompany} userName = {this.state.userName} />
+          <Searchbar selectTargetCompany = {this.selectTargetCompany} userData = {this.state.userData} />
         </header>
         <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
         <p className="iex-blurb">

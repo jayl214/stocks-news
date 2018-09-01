@@ -27,6 +27,7 @@ module Api::V1
     def show
       response = {
         name: @current_user.name,
+        companies: Company.joins(:user_companies).where(user_companies: {user_id: @current_user.id}).distinct
       }
       render json: response
     end
@@ -47,6 +48,7 @@ module Api::V1
           :password
         )
       end
+
       def authenticate(email, password)
         command = AuthenticateUser.call(email, password)
 

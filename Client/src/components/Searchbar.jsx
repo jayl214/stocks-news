@@ -76,7 +76,8 @@ class Searchbar extends Component {
   render() {
     return (
       <div className="searchbar">
-        <div>{this.props.userName}</div>
+        <div>{this.props.userData.name}</div>
+        {/*<div>{this.props.userData.portfolio}</div>*/}
         <input className="searchbar-input" type="text" placeholder="Search a Stock" onKeyUp = {this.searchbarSearch} onBlur = {this.hideSuggestions}/><i className="fas fa-search"></i>
         <div className={`searchbar-suggestions ${this.isSuggestionsActive()}`}>
           {this.state.searchbarSuggestions.map((suggestion, index)=>{
