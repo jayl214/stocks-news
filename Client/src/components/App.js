@@ -320,54 +320,6 @@ class App extends Component {
           loginModalStatus = {this.state.loginModalStatus}
           getUserData={this.getUserData}
         />
-        {/*<LoginModal registerModalStatus={this.state.registerModalStatus} />*/}
-        {/*<header className="app-header">
-
-          <div className={`modal-login ${this.state.loginModalStatus}`}>
-            <h2>Login</h2>
-            <form onSubmit={this.submitLoginForm}>
-              <input
-                name="loginEmail"
-                type="email"
-                placeholder="email..."
-                value={this.state.loginEmail}
-                onChange={this.handleInputChange}/>
-              <input
-                name="loginPassword"
-                type="password"
-                placeholder="password..."
-                value={this.state.loginPassword}
-                onChange={this.handleInputChange} />
-              <button>Login</button>
-            </form>
-          </div>
-
-          <div className={`modal-register ${this.state.registerModalStatus}`}>
-            <h2>Register</h2>
-            <form onSubmit={this.submitRegisterForm}>
-              <input
-                name="registerName"
-                type="text"
-                placeholder="name..."
-                value={this.state.registerName}
-                onChange={this.handleInputChange} />
-              <input
-                name="registerEmail"
-                type="email"
-                placeholder="email..."
-                value={this.state.registerEmail}
-                onChange={this.handleInputChange} />
-              <input
-                name="registerPassword"
-                type="password"
-                placeholder="password..."
-                value={this.state.registerPassword}
-                onChange={this.handleInputChange} />
-              <button>Register</button>
-            </form>
-          </div>
-
-        </header>*/}
         <div className = "content" onClick={this.hideLoginModal}>
           <Searchbar selectTargetCompany = {this.selectTargetCompany} userData = {this.state.userData} />
           <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
