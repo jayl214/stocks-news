@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios' //promise based ajax
 
+import LoginButton from './LoginButton'
+
 class Navbar extends Component {
 
   state={
@@ -55,15 +57,23 @@ class Navbar extends Component {
     })
   }
 
-  render() {
+  userLoginStatus = () => {
+    return document.cookie? true : false
+  }
 
+  logOut = () => {
+    document.cookie = 'Auth' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.location.reload()
+  }
+
+  render() {
     return (
       <header className="header">
         <div className="navbar">
           <span className = "navbar__logo--long">Stocks-News</span>
           <span className = "navbar__logo--short">Stocks-News</span>
           <div className = "navbar__button-group">
-            <button className = "navbar__button" onClick={this.props.toggleLoginModalStatus}>Log in</button>
+            <LoginButton toggleLoginModalStatus={this.props.toggleLoginModalStatus} logOut={this.logOut} />
           </div>
         </div>
 

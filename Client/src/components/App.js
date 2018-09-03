@@ -255,7 +255,7 @@ class App extends Component {
       name: this.state.targetCompany.name,
       symbol: this.state.targetCompany.ticker
     },{headers:{
-      Authorization: this.state.jwt
+      Authorization: document.cookie.slice(5)
     }})
     .then((response)=>{
       console.log(response)
