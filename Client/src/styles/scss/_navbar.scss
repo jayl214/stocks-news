@@ -1,0 +1,114 @@
+.header{
+  top: 0;
+  background-color: white;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  padding: 0 4rem;
+  .navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    .navbar__logo--long{
+      @include font1
+      font-size: 1.75rem;
+    }
+    .navbar__logo--short{
+      display: none;
+    }
+    .navbar__button-group{
+      .navbar__button{
+        height: 2rem;
+        font-size: 1rem;
+        line-height: 2rem;
+        font-weight: bold;
+        border: none;
+        border-right: none;
+        outline: none;
+        cursor: pointer;
+        &:hover{
+          border-bottom: 2px solid black;
+        }
+      }
+    }
+  }
+
+  .login-modal{
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    transition: 0.4s;
+    height: 30vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    &.false{
+      height: 0;
+      opacity: 0;
+      visibility: hidden;
+
+    }
+    .login-modal-section{
+      display: flex;
+      flex-flow: column;
+      form{
+        display: block;
+        input{
+          border: none;
+          border-bottom: 2px solid black;
+          font-size: .75rem;
+          height: 1.5rem;
+          width: 15rem;
+          margin-bottom: 1rem;
+        }
+        button{
+          cursor: pointer;
+          border: none;
+          font-weight: bold;
+          font-size: 1rem;
+          line-height: 1.5rem;
+          &:hover{
+            border-bottom: 2px solid black;
+          }
+        }
+      }
+    }
+    .login-modal-login{
+      display: flex;
+    }
+  }
+}
+
+@media (max-width: 720px){
+  .header{
+    padding: 0 2rem;
+    .navbar{
+      .navbar__logo--short{
+        display: flex;
+        @include font1
+        font-size: 1.25rem;
+      }
+      .navbar__logo--long{
+        display: none;
+      }
+      .navbar__button-group{
+        .navbar__button{
+          font-size: 0.9rem;
+        }
+      }
+    }
+    .login-modal{
+      height: 100vh;
+      flex-flow: column;
+      justify-content: flex-start;
+      .login-modal-section{
+        margin-top: 5rem;
+      }
+    }
+  }
+}

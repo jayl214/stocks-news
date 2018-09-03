@@ -2,6 +2,17 @@
 @import url(https://fonts.googleapis.com/css?family=Buenard);
 @import url(https://fonts.googleapis.com/css?family=Chivo);
 @import url(https://fonts.googleapis.com/css?family=Playfair+Display+SC);
+body {
+  padding: 0;
+  background-color: #fafafa;
+  font-family: "Chivo", sans-serif; }
+  body .content {
+    margin: 0 auto;
+    margin-top: 0;
+    padding-top: 9rem;
+    width: 100%;
+    max-width: 70rem; }
+
 .app-header .app-intro {
   font-size: 200%;
   font-weight: normal;
@@ -11,9 +22,99 @@
   font-family: "Chivo", sans-serif;
   font-size: .75rem; }
 
+.header {
+  top: 0;
+  background-color: white;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  padding: 0 4rem; }
+  .header .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem; }
+    .header .navbar .navbar__logo--long {
+      font-weight: normal;
+      font-family: "Playfair Display SC", serif;
+      font-size: 1.75rem; }
+    .header .navbar .navbar__logo--short {
+      display: none; }
+    .header .navbar .navbar__button-group .navbar__button {
+      height: 2rem;
+      font-size: 1rem;
+      line-height: 2rem;
+      font-weight: bold;
+      border: none;
+      border-right: none;
+      outline: none;
+      cursor: pointer; }
+      .header .navbar .navbar__button-group .navbar__button:hover {
+        border-bottom: 2px solid black; }
+  .header .login-modal {
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    transition: 0.4s;
+    height: 30vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center; }
+    .header .login-modal.false {
+      height: 0;
+      opacity: 0;
+      visibility: hidden; }
+    .header .login-modal .login-modal-section {
+      display: flex;
+      flex-flow: column; }
+      .header .login-modal .login-modal-section form {
+        display: block; }
+        .header .login-modal .login-modal-section form input {
+          border: none;
+          border-bottom: 2px solid black;
+          font-size: .75rem;
+          height: 1.5rem;
+          width: 15rem;
+          margin-bottom: 1rem; }
+        .header .login-modal .login-modal-section form button {
+          cursor: pointer;
+          border: none;
+          font-weight: bold;
+          font-size: 1rem;
+          line-height: 1.5rem; }
+          .header .login-modal .login-modal-section form button:hover {
+            border-bottom: 2px solid black; }
+    .header .login-modal .login-modal-login {
+      display: flex; }
+
+@media (max-width: 720px) {
+  .header {
+    padding: 0 2rem; }
+    .header .navbar .navbar__logo--short {
+      display: flex;
+      font-weight: normal;
+      font-family: "Playfair Display SC", serif;
+      font-size: 1.25rem; }
+    .header .navbar .navbar__logo--long {
+      display: none; }
+    .header .navbar .navbar__button-group .navbar__button {
+      font-size: 0.9rem; }
+    .header .login-modal {
+      height: 100vh;
+      flex-flow: column;
+      justify-content: flex-start; }
+      .header .login-modal .login-modal-section {
+        margin-top: 5rem; } }
+
 .searchbar {
-  display: block; }
+  display: block;
+  padding: 0rem 5% 0; }
   .searchbar .searchbar-input {
+    background-color: #fafafa;
     position: relative;
     font-size: 1rem;
     width: 80%;
@@ -27,6 +128,7 @@
       color: black;
       border-bottom: 2px solid black; }
   .searchbar .searchbar-suggestions {
+    z-index: 1000;
     font-family: "Chivo", sans-serif;
     position: absolute;
     background-color: white;
@@ -55,7 +157,8 @@
     border-right: none;
     outline: none;
     cursor: pointer;
-    color: rgba(1, 1, 1, 0.7); }
+    color: rgba(1, 1, 1, 0.7);
+    background-color: #fafafa; }
     .btn-group-timeRange .btn.btn-active {
       font-weight: bold;
       border-bottom: 2px solid black;

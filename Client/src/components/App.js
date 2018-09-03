@@ -6,6 +6,8 @@ import Chart from 'chart.js' //duh
 import '../styles/css/app.css';
 
 //React components
+import Navbar from './Navbar'
+import LoginModal from './LoginModal'
 import Searchbar from './Searchbar'
 import Graph from './Graph'
 import TimeRangeButtons from './TimeRangeButtons'
@@ -25,7 +27,8 @@ class App extends Component {
     userData: {
       name: '',
       portfolio: ''
-    }
+    },
+    loginModalStatus: false,
     // appjs: this
     // chartInstance: {},
   }
@@ -247,13 +250,6 @@ class App extends Component {
     )
   }
 
-  toggleLoginModalStatus = () => {
-    return (this.state.loginModalStatus ? this.setState({loginModalStatus:false}) : this.setState({loginModalStatus:true}) )
-  }
-  toggleRegisterModalStatus = () => {
-    return (this.state.registerModalStatus ? this.setState({registerModalStatus:false}) : this.setState({registerModalStatus:true}) )
-  }
-
   addCompanyToPortfolio = e =>{
     axios.post("api/v1/add_company",{
       name: this.state.targetCompany.name,
@@ -265,6 +261,14 @@ class App extends Component {
       console.log(response)
       this.getUserData()
     })
+  }
+
+  toggleLoginModalStatus = () => {
+    return (this.state.loginModalStatus ? this.setState({loginModalStatus:false}) : this.setState({loginModalStatus:true}) )
+  }
+
+  hideLoginModal = () => {
+    return this.setState({loginModalStatus:false})
   }
 
   submitLoginForm = e =>{
@@ -306,15 +310,18 @@ class App extends Component {
   }
   handleInputChange = e => {
     this.setState({[e.target.name]: e.target.value})
-    console.log(this.state)
   }
 
   render() {
     return (
       <div className="app">
-        <header className="app-header">
-          {/*<button onClick={this.toggleLoginModalStatus}>Login</button>
-          <button onClick={this.toggleRegisterModalStatus}>Register</button>*/}
+        <Navbar
+          toggleLoginModalStatus = {this.toggleLoginModalStatus}
+          loginModalStatus = {this.state.loginModalStatus}
+          getUserData={this.getUserData}
+        />
+        {/*<LoginModal registerModalStatus={this.state.registerModalStatus} />*/}
+        {/*<header className="app-header">
 
           <div className={`modal-login ${this.state.loginModalStatus}`}>
             <h2>Login</h2>
@@ -360,18 +367,17 @@ class App extends Component {
             </form>
           </div>
 
-          <h1 className="app-intro">
-            Stocks-News
-          </h1>
+        </header>*/}
+        <div className = "content" onClick={this.hideLoginModal}>
           <Searchbar selectTargetCompany = {this.selectTargetCompany} userData = {this.state.userData} />
-        </header>
-        <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
-        <p className="iex-blurb">
-          Stock data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
-        </p>
-        <Graph targetCompany = {this.state.targetCompany} addCompanyToPortfolio = {this.addCompanyToPortfolio} />
-        <ArticleList articleList = {this.state.articleList} />
-        {/*<InstructionsModal />*/}
+          <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
+          <p className="iex-blurb">
+            Stock data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
+          </p>
+          <Graph targetCompany = {this.state.targetCompany} addCompanyToPortfolio = {this.addCompanyToPortfolio} />
+          <ArticleList articleList = {this.state.articleList} />
+          {/*<InstructionsModal />*/}
+        </div>
       </div>
     )
   }

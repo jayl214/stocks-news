@@ -1,25 +1,25 @@
 .searchbar{
   display: block;
+  padding: 0rem 5% 0;
+
   .searchbar-input{
+    background-color: rgba(250,250,250,1);
     position: relative;
     font-size: 1rem;
     width: 80%;
     height: 2rem;
     padding: 0 1rem;
-    // border-radius: .5rem;
-    // border: $border-light;
-    // text-decoration: underline;
     border: none;
     border-bottom: 2px solid black;
     color: rgba(1,1,1,0.5);
     outline: none;
     &:focus{
       color: black;
-      // font-weight: bold;
       border-bottom: 2px solid black;
     }
   }
   .searchbar-suggestions{
+    z-index: 1000;
     @include font3
     position: absolute;
     background-color: white;
