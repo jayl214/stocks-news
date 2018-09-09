@@ -231,6 +231,7 @@ class App extends Component {
 
   selectTargetCompany = (event) => {
     this.setState({articleList:[]})
+    this.hideModals()
     let targetTicker = event.target.getAttribute("ticker")
     let targetName = event.target.getAttribute("name")
     this.setState(
@@ -242,7 +243,6 @@ class App extends Component {
         searchbarSuggestions: [],
       }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
     )
-    this.hideModals
   }
 
   selectTimeRange = (event) => {
