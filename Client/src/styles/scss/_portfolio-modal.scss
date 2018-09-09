@@ -1,0 +1,36 @@
+.portfolio-modal{
+  display: flex;
+  position: fixed;
+  margin-top: 4rem;
+  right: 0;
+  width: 40%;
+  max-width: 30rem;
+  height: 100%;
+  z-index: 1000;
+  transition: 0.4s;
+  background-color:  white;
+  .content{
+    padding-top: 0;
+    transition: 0.1s;
+    .portfolio-list{
+      .portfolio-list__item{
+        cursor: pointer;
+      }
+    }
+  }
+  &.false{
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+    .content{
+      opacity: 0;
+    }
+  }
+}
+
+@media (max-width: 720px){
+  .portfolio-modal{
+    width: 100%;
+    max-width: 100%;
+  }
+}

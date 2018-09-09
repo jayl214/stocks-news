@@ -5,7 +5,7 @@ class LoginButton extends Component {
   render() {
     if(this.props.userData.name){
       return (
-        <div className="navbar__hamburger">
+        <div className="navbar__hamburger" onClick={this.props.togglePortfolioModalStatus}>
           <i className="fas fa-bars"></i>
         </div>
       )

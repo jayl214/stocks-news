@@ -30,6 +30,7 @@ class App extends Component {
       portfolio: []
     },
     loginModalStatus: false,
+    portfolioModalStatus: false,
     // appjs: this
     // chartInstance: {},
   }
@@ -241,6 +242,7 @@ class App extends Component {
         searchbarSuggestions: [],
       }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
     )
+    this.hideModals
   }
 
   selectTimeRange = (event) => {
@@ -270,8 +272,13 @@ class App extends Component {
     return (this.state.loginModalStatus ? this.setState({loginModalStatus:false}) : this.setState({loginModalStatus:true}) )
   }
 
-  hideLoginModal = () => {
-    return this.setState({loginModalStatus:false})
+  togglePortfolioModalStatus = () => {
+    return (this.state.portfolioModalStatus ? this.setState({portfolioModalStatus:false}) : this.setState({portfolioModalStatus:true}) )
+  }
+
+  hideModals = () => {
+    this.setState({loginModalStatus:false})
+    this.setState({portfolioModalStatus:false})
   }
 
   submitLoginForm = e =>{
@@ -282,16 +289,13 @@ class App extends Component {
     })
     .then( (response) => {
       document.cookie = `Auth=${response.data.access_token}`
-
       this.getUserData()
       this.setState({
         jwt: this.getCookieValue('Auth')
       })
-      alert(document.cookie)
       console.log(response.data)
     })
     .catch( (error) => {
-      window.alert("Login Error");
       console.log(error);
     })
   }
@@ -307,7 +311,6 @@ class App extends Component {
       console.log(response.data)
     })
     .catch( (error) => {
-      window.alert("Registration Error");
       console.log(error);
     })
   }
@@ -331,13 +334,20 @@ class App extends Component {
         <Navbar
           toggleLoginModalStatus = {this.toggleLoginModalStatus}
           loginModalStatus = {this.state.loginModalStatus}
+          togglePortfolioModalStatus = {this.togglePortfolioModalStatus}
           getUserData={this.getUserData}
           userData = {this.state.userData}
           logout = {this.logout}
           getCookieValue = {this.getCookieValue}
           selectTargetCompany = {this.selectTargetCompany}
         />
-        <div className = "content" onClick={this.hideLoginModal}>
+        <PortfolioModal
+          userData = {this.state.userData}
+          logout = {this.logout}
+          selectTargetCompany = {this.selectTargetCompany}
+          portfolioModalStatus = {this.state.portfolioModalStatus}
+        />
+        <div className = "content" onClick={this.hideModals}>
           <Searchbar selectTargetCompany = {this.selectTargetCompany} userData = {this.state.userData} />
           <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
           <p className="iex-blurb">

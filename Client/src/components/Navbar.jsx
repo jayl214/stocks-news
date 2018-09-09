@@ -69,7 +69,7 @@ class Navbar extends Component {
           <span className = "navbar__logo--long">Stocks-News</span>
           <span className = "navbar__logo--short">Stocks-News</span>
           <div className = "navbar__button-group">
-            <LoginButton toggleLoginModalStatus={this.props.toggleLoginModalStatus} userData = {this.props.userData} />
+            <LoginButton toggleLoginModalStatus={this.props.toggleLoginModalStatus} togglePortfolioModalStatus = {this.props.togglePortfolioModalStatus} userData = {this.props.userData} />
           </div>
         </div>
 
@@ -122,12 +122,6 @@ class Navbar extends Component {
           </div>
 
         </div>
-
-        <PortfolioModal
-          userData = {this.props.userData}
-          logout = {this.props.logout}
-          selectTargetCompany = {this.props.selectTargetCompany}
-        />
 
       </header>
     )
