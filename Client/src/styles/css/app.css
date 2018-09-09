@@ -9,7 +9,7 @@ body {
   body .content {
     margin: 0 auto;
     margin-top: 0;
-    padding-top: 9rem;
+    padding-top: 20rem;
     width: 100%;
     max-width: 70rem; }
 
@@ -52,9 +52,23 @@ body {
       border: none;
       border-right: none;
       outline: none;
-      cursor: pointer; }
+      cursor: pointer;
+      margin-left: 1.5rem; }
       .header .navbar .navbar__button-group .navbar__button:hover {
         border-bottom: 2px solid black; }
+    .header .navbar .navbar__button-group .navbar__hamburger {
+      cursor: pointer;
+      border-radius: 50%;
+      width: 2.25rem;
+      height: 2.25rem;
+      line-height: 2.25rem;
+      font-size: 1.25rem; }
+      .header .navbar .navbar__button-group .navbar__hamburger:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+        -webkit-transition: 0.2s;
+        -moz-transition: 0.2s;
+        -ms-transition: 0.2s;
+        transition: 0.2s; }
   .header .login-modal {
     -webkit-transition: 0.4s;
     -moz-transition: 0.4s;
@@ -74,6 +88,7 @@ body {
       .header .login-modal .login-modal-section form {
         display: block; }
         .header .login-modal .login-modal-section form input {
+          outline: none;
           border: none;
           border-bottom: 2px solid black;
           font-size: .75rem;

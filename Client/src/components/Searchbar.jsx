@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios' //promise based ajax
 import Fuse from 'fuse.js' //fuzzy searcher
+
 import Suggestion from './Suggestion.jsx'
-import Welcome from './Welcome.jsx'
 
 class Searchbar extends Component {
 
@@ -77,8 +77,6 @@ class Searchbar extends Component {
   render() {
     return (
       <div className="searchbar">
-        <Welcome userData = {this.props.userData} />
-        {/*<div>{this.props.userData.portfolio}</div>*/}
         <input className="searchbar-input" type="text" placeholder="Search a Stock" onKeyUp = {this.searchbarSearch} onBlur = {this.hideSuggestions}/><i className="fas fa-search"></i>
         <div className={`searchbar-suggestions ${this.isSuggestionsActive()}`}>
           {this.state.searchbarSuggestions.map((suggestion, index)=>{

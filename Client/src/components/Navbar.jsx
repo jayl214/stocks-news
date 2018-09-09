@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios' //promise based ajax
 
 import LoginButton from './LoginButton'
+import PortfolioModal from './PortfolioModal'
 
 class Navbar extends Component {
 
@@ -22,7 +23,7 @@ class Navbar extends Component {
       document.cookie = `Auth=${response.data.access_token}`
       this.props.getUserData()
       this.setState({
-        jwt: document.cookie.slice(5)
+        jwt: this.props.getCookieValue('Auth')
       })
       alert(document.cookie)
       console.log(response.data)
@@ -61,11 +62,6 @@ class Navbar extends Component {
     return document.cookie? true : false
   }
 
-  logOut = () => {
-    document.cookie = 'Auth' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    window.location.reload()
-  }
-
   render() {
     return (
       <header className="header">
@@ -73,7 +69,7 @@ class Navbar extends Component {
           <span className = "navbar__logo--long">Stocks-News</span>
           <span className = "navbar__logo--short">Stocks-News</span>
           <div className = "navbar__button-group">
-            <LoginButton toggleLoginModalStatus={this.props.toggleLoginModalStatus} logOut={this.logOut} />
+            <LoginButton toggleLoginModalStatus={this.props.toggleLoginModalStatus} userData = {this.props.userData} />
           </div>
         </div>
 
@@ -126,6 +122,13 @@ class Navbar extends Component {
           </div>
 
         </div>
+
+        <PortfolioModal
+          userData = {this.props.userData}
+          logout = {this.props.logout}
+          selectTargetCompany = {this.props.selectTargetCompany}
+        />
+
       </header>
     )
   }

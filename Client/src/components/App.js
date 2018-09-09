@@ -8,6 +8,7 @@ import '../styles/css/app.css';
 //React components
 import Navbar from './Navbar'
 import LoginModal from './LoginModal'
+import PortfolioModal from './PortfolioModal'
 import Searchbar from './Searchbar'
 import Graph from './Graph'
 import TimeRangeButtons from './TimeRangeButtons'
@@ -26,7 +27,7 @@ class App extends Component {
     userName: '',
     userData: {
       name: '',
-      portfolio: ''
+      portfolio: []
     },
     loginModalStatus: false,
     // appjs: this
@@ -36,7 +37,7 @@ class App extends Component {
   componentDidMount = () =>{
     if(document.cookie){
       this.setState({
-        jwt: document.cookie.slice(5)
+        jwt: this.getCookieValue('Auth')
       })
       this.getUserData()
     }
@@ -44,7 +45,7 @@ class App extends Component {
 
   getUserData = () => {
     axios.get('api/v1/user', {headers:{
-      Authorization: document.cookie.slice(5)
+      Authorization: this.getCookieValue('Auth')
     }})
     .then((response)=>{
       console.log(response)
@@ -52,8 +53,10 @@ class App extends Component {
         userData: {
           name: response.data.name,
           portfolio: response.data.companies
-        }
+        },
       })
+    }).catch(error=>{
+      this.logout
     })
   }
 
@@ -255,7 +258,7 @@ class App extends Component {
       name: this.state.targetCompany.name,
       symbol: this.state.targetCompany.ticker
     },{headers:{
-      Authorization: document.cookie.slice(5)
+      Authorization: this.getCookieValue('Auth')
     }})
     .then((response)=>{
       console.log(response)
@@ -282,7 +285,7 @@ class App extends Component {
 
       this.getUserData()
       this.setState({
-        jwt: document.cookie.slice(5)
+        jwt: this.getCookieValue('Auth')
       })
       alert(document.cookie)
       console.log(response.data)
@@ -312,6 +315,16 @@ class App extends Component {
     this.setState({[e.target.name]: e.target.value})
   }
 
+  logout = () => {
+    document.cookie = 'Auth' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.location.reload()
+  }
+
+  getCookieValue(name) {
+    var b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return b ? b.pop() : '';
+  }
+
   render() {
     return (
       <div className="app">
@@ -319,6 +332,10 @@ class App extends Component {
           toggleLoginModalStatus = {this.toggleLoginModalStatus}
           loginModalStatus = {this.state.loginModalStatus}
           getUserData={this.getUserData}
+          userData = {this.state.userData}
+          logout = {this.logout}
+          getCookieValue = {this.getCookieValue}
+          selectTargetCompany = {this.selectTargetCompany}
         />
         <div className = "content" onClick={this.hideLoginModal}>
           <Searchbar selectTargetCompany = {this.selectTargetCompany} userData = {this.state.userData} />

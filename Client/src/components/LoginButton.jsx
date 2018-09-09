@@ -3,13 +3,17 @@ import React, { Component } from 'react';
 class LoginButton extends Component {
 
   render() {
-    if(document.cookie){
+    if(this.props.userData.name){
       return (
-        <button className = "navbar__button navbar__button--logout" onClick={this.props.logOut}>Log out</button>
+        <div className="navbar__hamburger">
+          <i className="fas fa-bars"></i>
+        </div>
       )
     }else{
       return(
-        <button className = "navbar__button navbar__button--login" onClick={this.props.toggleLoginModalStatus}>Log in</button>
+        <div>
+          <button className = "navbar__button navbar__button--login" onClick={this.props.toggleLoginModalStatus}>Log in</button>
+        </div>
       )
     }
 

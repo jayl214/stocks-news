@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 class Welcome extends Component {
 
   render() {
-    if(document.cookie){
+    if(this.props.userData.name){
       return (
-        <h3>Welcome, {this.props.userData.name}</h3>
+        <div>Welcome, {this.props.userData.name}</div>
       )
     }else{
       return ('')

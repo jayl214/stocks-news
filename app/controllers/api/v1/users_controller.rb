@@ -35,9 +35,11 @@ module Api::V1
     def add_company
       @company = Company.find_by(symbol: params[:symbol])
       if (@company==nil)
-        @newCompany = Company.create(symbol: params[:symbol], name: params[:name])
+        @company = Company.create(symbol: params[:symbol], name: params[:name])
+        @newUserCompany = UserCompany.create(user: @current_user, company: @company)
+      else
+        @newUserCompany = UserCompany.create(user: @current_user, company: @company)
       end
-      @newUserCompany = UserCompany.create(user: @current_user, company: @company)
     end
 
     private
