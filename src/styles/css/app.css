@@ -2,13 +2,16 @@
 @import url(https://fonts.googleapis.com/css?family=Buenard);
 @import url(https://fonts.googleapis.com/css?family=Chivo);
 @import url(https://fonts.googleapis.com/css?family=Playfair+Display+SC);
-.app-header .app-intro {
-  font-size: 200%;
-  font-weight: normal;
-  font-family: "Playfair Display SC", serif; }
+body {
+  height: 100vh; }
+
+.header .header__title {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif; }
 
 .iex-blurb {
-  font-family: "Chivo", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: .75rem; }
 
 .searchbar {
@@ -27,7 +30,7 @@
       color: black;
       border-bottom: 2px solid black; }
   .searchbar .searchbar-suggestions {
-    font-family: "Chivo", sans-serif;
+    font-family: "Roboto", sans-serif;
     position: absolute;
     background-color: white;
     left: 21%;

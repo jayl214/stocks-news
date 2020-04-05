@@ -1,54 +1,45 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class TimeRangeButtons extends Component {
+const TIME_RANGE_OPTIONS = [
+  {
+    timeRange: "1m",
+    label: "1 Month"
+  },
+  {
+    timeRange: "6m",
+    label: "6 Months"
+  },
+  {
+    timeRange: "1y",
+    label: "1 Year"
+  },
+  {
+    timeRange: "5y",
+    label: "5 Years"
+  },
+]
 
-  activateButton = (event) => {
-    this.props.selectTimeRange(event)
+const TimeRangeButtons = ({
+  timeRange,
+  onSelectTimeRange,
+}) => {
+  const _onClickTimeRangeButton = (event = {}) => {
+    const timeRange = event.target?.getAttribute?.("timeRange");
+    onSelectTimeRange(timeRange);
   }
-
-  //super gross brute force code, need to figure out how to refactor later...
-  is1mActive = () => {
-    if(this.props.timeRange === '1m'){
-      return 'btn-active'
-    }else {
-      return 'btn-not-active'
-    }
-  }
-  is6mActive = () => {
-    if(this.props.timeRange === '6m'){
-      return 'btn-active'
-    }else {
-      return 'btn-not-active'
-    }
-  }
-  is1yActive = () => {
-    if(this.props.timeRange === '1y'){
-      return 'btn-active'
-    }else {
-      return 'btn-not-active'
-    }
-  }
-  is5yActive = () => {
-    if(this.props.timeRange === '5y'){
-      return 'btn-active'
-    }else {
-      return 'btn-not-active'
-    }
-  }
-
-  render() {
-    return (
-
-      <div className="btn-group-timeRange">
-        <button className={`btn btn-timeRange-1m ${this.is1mActive()}`} name="1m" onClick={this.activateButton}>1 Month</button>
-        <button className={`btn btn-timeRange-6m ${this.is6mActive()}`} name="6m" onClick={this.activateButton}>6 Months</button>
-        <button className={`btn btn-timeRange-1y ${this.is1yActive()}`} name="1y" onClick={this.activateButton}>1 Year</button>
-        <button className={`btn btn-timeRange-5y ${this.is5yActive()}`} name="5y" onClick={this.activateButton}>5 Years</button>
-      </div>
-
-    );
-  }
-
+  return (
+    <div className="btn-group-timeRange">
+      {TIME_RANGE_OPTIONS.map((timeRangeOption = {}) => 
+        <button
+          className={`btn btn-timeRange-6m ${timeRangeOption.timeRange === timeRange ? 'btn-active' : ''}`}
+          timeRange={timeRangeOption.timeRange}
+          onClick={_onClickTimeRangeButton}
+        >
+          {timeRangeOption.label}
+        </button>
+      )}
+    </div>
+  );
 }
 
 export default TimeRangeButtons;

@@ -6,15 +6,15 @@
 
 
 
-$font1: 'Fira Sans', sans-serif;
-$font1: 'Playfair Display SC', serif;
+// $font1: 'Fira Sans', sans-serif;
+// $font1: 'Playfair Display SC', serif;
 
 $font2: 'Buenard', serif;
-$font3: 'Chivo', sans-serif;
+$font3: 'Roboto', sans-serif;
 
 @mixin font1{
-  font-weight: normal;
-  font-family: $font1;
+  font-weight: bold;
+  font-family: $font3;
   // font-style: italic;
 }
 
@@ -24,7 +24,7 @@ $font3: 'Chivo', sans-serif;
 }
 
 @mixin font2{
-  font-family: $font2
+  font-family: $font3
 }
 
 $border-light: 1px solid rgba(160, 160, 160, .5);

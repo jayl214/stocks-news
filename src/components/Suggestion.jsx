@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-
-class Suggestion extends Component {
+import React from 'react';
 
 
-
-  render() {
-    return (
-      <div className="searchbar-suggestion"
-           ticker={this.props.suggestion.symbol}
-           name={this.props.suggestion.name}
-           onMouseDown={this.props.selectTargetCompany} >
-        {this.props.suggestion.name} ({this.props.suggestion.symbol})
-      </div>
-
-    );
-  }
-
+const Suggestion = ({
+  name,
+  symbol,
+  onSelectTargetCompany = () => {}
+}) => {
+  return (
+    <div
+      className="searchbar-suggestion"
+      ticker={symbol}
+      name={name}
+      onMouseDown={onSelectTargetCompany}
+    >
+      {name} ({symbol})
+    </div>
+  );
 }
 
 export default Suggestion;

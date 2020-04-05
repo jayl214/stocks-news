@@ -1,72 +1,85 @@
-import React, { Component } from 'react';
-import axios from 'axios' //promise based ajax
-import Fuse from 'fuse.js' //fuzzy searcher
-import Chart from 'chart.js' //duh
-
-import '../styles/css/app.css';
-
-//React components
+import React, { Component, useState, useEffect } from 'react';
+import axios from 'axios'
+// import Fuse from 'fuse.js'
+import Chart from 'chart.js'
+import { of } from 'await-of';
 import Searchbar from './Searchbar'
 import Graph from './Graph'
 import TimeRangeButtons from './TimeRangeButtons'
 import ArticleList from './ArticleList'
-import InstructionsModal from './InstructionsModal'
 
-class App extends Component {
+import '../styles/css/app.css';
 
-  state = {
-    targetCompany:{
-      name: '',
-      ticker: ''
-    },
-    timeRange: '1m',
-    articleList: [],
-    // appjs: this
-    // chartInstance: {},
+// const FUSE_OPTIONS = {
+//   shouldSort: true,
+//   threshold: 1,
+//   location: 0,
+//   distance: 100,
+//   maxPatternLength: 1000,
+//   minMatchCharLength: 1,
+//   keys: [
+//     "headline",
+//     "snippet"
+//   ]
+// }
+
+const _onFormatDate = (date = {}) => {
+  let d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month
+  if (day.length < 2) day = '0' + day
+
+  return year+month+day
+}
+
+const _onGetClickDateRange = (date = {}) => {
+  let yesterday = new Date(date)
+  let tomorrow = new Date(date)
+  yesterday.setDate(yesterday.getDate()+1)
+  tomorrow.setDate(tomorrow.getDate()+2)
+  let output = {
+    beginDate: _onFormatDate(yesterday),
+    endDate: _onFormatDate(tomorrow),
   }
+  return output
+}
 
-  chartNewData = (ticker, name, timeRange) => {
-    axios.get(`https://api.iextrading.com/1.0/stock/${ticker}/chart/${timeRange}`)
-      .then( (response) => {
-        let stockValues = []
-        let dates = []
-        response.data.forEach((day) => {
-          dates.push(day.date)
-          stockValues.push(day.close)
-        })
-        //need to destroy previous chart before making a new one, or will have bug where old graph pops up
-        this.destroyPreviousChart()
-        this.generateChart(dates, name, stockValues)
-      })
-      .catch( (error) => {
-        window.alert("Error retrieving stock data");
-        console.log(error);
-      })
-  }
+// called from news api
+// const _onSortNewsArticles = (allArticles, searchParameters) =>{
+//   const fuse = new Fuse(allArticles, FUSE_OPTIONS); // "list" is the item array
+//   return fuse.search(searchParameters)
+// }
 
-  //selects instance of chart at id.= stockChart and utterly destroys it
-  destroyPreviousChart = () => {
-    if (this.state.chartInstance) {
-      this.state.chartInstance.destroy()
+const App = () => {
+
+  const [targetCompany, setTargetCompany] = useState({
+    name: "",
+    ticker: ""
+  });
+  const [timeRange, setTimeRange] = useState("1m")
+  const [articleList, setArticleList] = useState([])
+  const [chartInstance, setChartInstance] = useState({})
+
+  const _onChartNewData = async (ticker, name, timeRange) => {
+    const [response = {}, error] = await of(axios.get(`https://sandbox.iexapis.com/stable/stock/${ticker}/chart/${timeRange}`, {
+      params: {token:'Tpk_45fa2d540dac43b1b2f4b74ffbf64b68'}
+    }))
+    if (error) {
+      window.alert("Error retrieving stock data");
+      console.log(error);
+      throw error
     }
-  }
+    
+    const stockDataPoints = response?.data || [];
 
-  //called in setNewsArticlesState
-  sortNewsArticles = (allArticles, searchParameters) =>{
-    const fuseOptions = {
-      shouldSort: true,
-      threshold: 1,
-      location: 0,
-      distance: 100,
-      maxPatternLength: 1000,
-      minMatchCharLength: 1,
-      keys: [
-        "headline",
-        "snippet"
-      ]
+    if (chartInstance.destroy) {
+      chartInstance.destroy()
     }
-    const fuse = new Fuse(allArticles, fuseOptions); // "list" is the item array
-    return fuse.search(searchParameters)
+  
+    _onGenerateChart(name, stockDataPoints)      
   }
 
   // News API
@@ -85,87 +98,49 @@ class App extends Component {
   // }
 
   //NY Times API
-  setNewsArticlesState = (clickedPointDate) =>{
-    console.log(clickedPointDate)
+  const _onSetNewsArticlesState = async (clickedPointDate) =>{
     const date = new Date(clickedPointDate)
-    const dateRange = this.setDateRange(date)
+    const clickDateRange = _onGetClickDateRange(date)
     clickedPointDate = clickedPointDate.replace(/-/g, '')
-    let clickedPointDateTomorrow = (parseInt(clickedPointDate)+1).toString()
-    axios.get(`https://developer.nytimes.com/proxy/https/api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.REACT_APP_NYT_API_KEY}&q=${this.state.targetCompany.name+' shares stocks'}&begin_date=${dateRange.beginDate}&end_date=${dateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`)
-      .then( (response) => {
-        console.log(response.data.response.docs)
-        let articleList = []
-        response.data.response.docs.forEach((article)=>{
-          articleList.push({
-            headline: article.headline.main,
-            snippet: article.snippet,
-            pubDate: article.pub_date,
-            url: article.web_url,
-          })
-        })
-        // let sortedArticleList = this.sortNewsArticles(articleList, this.state.targetCompany.name+' shares stocks')
-        this.setState({articleList:articleList})
-      })
-      .catch( (error) => {
-        // handle error
-        window.alert("Error retrieving articles");
-        console.log(error);
-      })
-  }
 
-  formatDate = (date) => {
-    let d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month
-    if (day.length < 2) day = '0' + day
-
-    return year+month+day
-  }
-
-  setDateRange = (date) => {
-    let yesterday = new Date(date)
-    let tomorrow = new Date(date)
-    yesterday.setDate(yesterday.getDate()+1)
-    tomorrow.setDate(tomorrow.getDate()+2)
-    let output = {
-      beginDate: this.formatDate(yesterday),
-      endDate: this.formatDate(tomorrow),
+    const [response = {}, error] = await of(axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${'ZGFwwwPg4vmKWQqTORXT4LYAEaK56e34'}&q=${targetCompany.name}&begin_date=${clickDateRange.beginDate}&end_date=${clickDateRange.endDate}&fl=web_url%2Csnippet%2Clead_paragraph%2Cabstract%2Cheadline%2Ckeywords%2Cpub_date%2Ctype_of_material`))
+    const responseArticleList = response.data?.response?.docs?.map?.((article={}) => ({
+      headline: article.headline.main,
+      snippet: article.snippet,
+      pubDate: article.pub_date,
+      url: article.web_url,
+    }));
+    if (error) {
+      window.alert("Error retrieving articles");
+      console.log(error);
+      throw error
     }
-    console.log(output)
-    return output
+    setArticleList(responseArticleList)
   }
 
-  generateChart = (dates, name, stockValues) => {
-    let appjs = this //for calling React functions like setState in onClick
+  const _onGenerateChart = (name, stockDataPoints) => {
+    const dates = stockDataPoints.map((stockDataPoint = {}) => stockDataPoint.date)
+    const stockClosingValues = stockDataPoints.map((stockDataPoint = {}) => stockDataPoint.close)
     const ctx = document.getElementById('stockChart')
     const chart = new Chart(ctx, {
-        // The type of chart we want to create
         type: 'line',
-
-        // The data for our dataset
         data: {
             labels: dates,
             datasets: [{
                 label: name,
                 borderColor: 'rgba(255,236,0,1)',
-                data: stockValues,
+                data: stockClosingValues,
                 radius: 0,
                 pointHoverRadius : 5,
                 lineTension:0
             }]
         },
-        // Configuration options go here
         options: {
-          onClick: function (event){
-            let clickedPoint = this.getElementsAtXAxis(event)
-            if (clickedPoint.length > 0){
-              let clickedPointIndex = clickedPoint[0]._index
-              let clickedPointDate = dates[clickedPointIndex]
-              appjs.setNewsArticlesState(clickedPointDate)
-            }
+          onClick: function(event = {}){
+            const clickedPoint = this.getElementsAtXAxis(event)
+            const clickedPointIndex = clickedPoint?.[0]?._index;
+            const clickedPointDate = dates?.[clickedPointIndex];
+            _onSetNewsArticlesState(clickedPointDate)
           },
           legend:{
             display:false,
@@ -179,7 +154,7 @@ class App extends Component {
             intersect: false,
             callbacks: {
               label: function(tooltipItem) {
-                return appjs.state.targetCompany.ticker + ': ' + Number(tooltipItem.yLabel)+" Click to get news";
+                return targetCompany.ticker + ': ' + Number(tooltipItem.yLabel)+" Click to get news";
               }
             }
           },
@@ -188,55 +163,46 @@ class App extends Component {
           //   mode: 'nearest',
           // }
         }
-    })
+    });
     //keep instance of chart in state so can access in other functions (deleting in destroyPreviousChart() )
-    this.setState({chartInstance: chart})
+    setChartInstance(chart);
   }
 
-  selectTargetCompany = (event) => {
-    this.setState({articleList:[]})
-    let targetTicker = event.target.getAttribute("ticker")
-    let targetName = event.target.getAttribute("name")
-    this.setState(
-      {
-        targetCompany:{
-          name: targetName,
-          ticker: targetTicker
-        },
-        searchbarSuggestions: [],
-      }, this.chartNewData(targetTicker, targetName, this.state.timeRange)
-    )
+  const _onSelectTargetCompany = (event = {}) => {
+    setArticleList([]);
+    const ticker = event.target?.getAttribute?.("ticker");
+    const name = event.target?.getAttribute?.("name");
+    setTargetCompany({
+      name,
+      ticker
+    })
+    _onChartNewData(ticker, name, timeRange)
   }
 
-  selectTimeRange = (event) => {
-    this.setState({articleList:[]})
-    let timeRange = event.target.getAttribute("name")
-    this.setState(
-      {
-        timeRange: timeRange
-      }, this.chartNewData(this.state.targetCompany.ticker, this.state.targetCompany.name, timeRange)
-    )
+  const _onSelectTimeRange = (newTimeRange) => {
+    setArticleList([]);
+    setTimeRange(newTimeRange)
+    _onChartNewData(targetCompany.ticker, targetCompany.name, newTimeRange)
   }
 
-  render() {
-    return (
-      <div className="app">
-        <header className="app-header">
-          <h1 className="app-intro">
-            Stocks-News
-          </h1>
-          <Searchbar selectTargetCompany = {this.selectTargetCompany} />
-        </header>
-        <TimeRangeButtons selectTimeRange = {this.selectTimeRange} timeRange = {this.state.timeRange} />
-        <p className="iex-blurb">
-          Stock data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
-        </p>
-        <Graph targetCompany = {this.state.targetCompany} />
-        <ArticleList articleList = {this.state.articleList} />
-        {/*<InstructionsModal />*/}
-      </div>
-    )
-  }
+  return (
+    <div className="app">
+      <header className="header">
+        <h1 className="header__title">
+          Stocks-News
+        </h1>
+        <Searchbar onSelectTargetCompany = {_onSelectTargetCompany} />
+      </header>
+      <TimeRangeButtons onSelectTimeRange = {_onSelectTimeRange} timeRange = {timeRange} />
+      <p className="iex-blurb">
+        Stock data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
+      </p>
+      <Graph
+        companyName={targetCompany.name}
+      />
+      <ArticleList articleList = {articleList} />
+    </div>
+  )
 }
 
 export default App;

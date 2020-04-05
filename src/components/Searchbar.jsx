@@ -1,91 +1,86 @@
-import React, { Component } from 'react';
-import axios from 'axios' //promise based ajax
-import Fuse from 'fuse.js' //fuzzy searcher
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'
+import Fuse from 'fuse.js'
 import Suggestion from './Suggestion.jsx'
+import { of } from 'await-of';
 
-class Searchbar extends Component {
+const ESCAPE_BUTTON_KEYCODE = 27
 
-  state = {
-    searchbarSuggestions: [],
-    companyTickersAndNames: [],
+const FUSE_OPTIONS = {
+  shouldSort: true,
+  threshold: 0.6,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  minMatchCharLength: 1,
+  keys: [
+    "name",
+    "symbol"
+  ]
+}
+
+const Searchbar = ({
+  onSelectTargetCompany
+}) => {
+
+  const [searchbarSuggestions, setSearchbarSuggestions] = useState([]);
+  const [companyTickersAndNamesFuzzySearch, setCompanyTickersAndNamesFuzzySearch] = useState({});
+
+  useEffect(() => {
+    _onGetCompanyTickersAndNames()
+  }, []);
+
+  const _onGetCompanyTickersAndNames = async () => {
+    const [response = {}, error] = await of(axios.get('https://api.iextrading.com/1.0/ref-data/symbols'));
+    if (error) {
+      console.log(error);
+      throw error;
+    }
+    const {data: companyTickersAndNamesList = []} = response;
+    setCompanyTickersAndNamesFuzzySearch(new Fuse(companyTickersAndNamesList, FUSE_OPTIONS));
   }
 
-  componentDidMount(){
-    this.getCompanyTickersAndNames()
-  }
-
-  getCompanyTickersAndNames = () => {
-    axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
-      .then( (response) => {
-        this.setState({companyTickersAndNames:response.data})
-      })
-      .catch( (error) => {
-        // handle error
-        console.log(error);
-      })
-  }
-
-  searchbarSearch = (event) => {
+  const _onSearchbarKeyUp = (event = {}) => {
     //hide suggestions if user hits escape
-    if(event.keyCode===27){
-      this.hideSuggestions()
-    }else{
-      const input = event.target.value
-      let searchbarSuggestions = this.searchbarSuggestionsGenerator(input, this.state.companyTickersAndNames)
-      this.setState({searchbarSuggestions:searchbarSuggestions})
+    if(event.keyCode === ESCAPE_BUTTON_KEYCODE){
+      _onResetSearchbarSuggestions()
+      return;
     }
+    const input = event.target?.value;
+    const searchbarSuggestions = _onGenerateSearchbarSuggestions(input);
+    setSearchbarSuggestions(searchbarSuggestions);
   }
 
-  searchbarSuggestionsGenerator = (input, companyList) => {
-    const fuseOptions = {
-      shouldSort: true,
-      threshold: 0.6,
-      location: 0,
-      distance: 100,
-      maxPatternLength: 32,
-      minMatchCharLength: 1,
-      keys: [
-        "name",
-        "symbol"
-      ]
-    }
-    const fuse = new Fuse(companyList, fuseOptions); // "list" is the item array
-    let fuzzySearchResults = fuse.search(input)
-    //top 5 results only
-    if (fuzzySearchResults.length>5){
-      fuzzySearchResults.length = 5
-    }
-    return fuzzySearchResults
+  const _onGenerateSearchbarSuggestions = (input) => {
+    const fuzzySearchResults = companyTickersAndNamesFuzzySearch.search?.(input);
+    return fuzzySearchResults.length > 5 ? fuzzySearchResults.slice(0, 4) : fuzzySearchResults;
   }
 
-  isSuggestionsActive = () => {
-    if(this.state.searchbarSuggestions.length>0){
-      console.log(this.state.searchbarSuggestions)
-      return 'visible'
-    }else{
-      return 'hidden'
-    }
-  }
+  const _onResetSearchbarSuggestions = () => setSearchbarSuggestions([])
 
-  hideSuggestions = (event) => {
-    this.setState({
-      searchbarSuggestions: [],
-    })
-  }
-
-  render() {
-    return (
-      <div className="searchbar">
-        <input className="searchbar-input" type="text" placeholder="Search a Stock" onKeyUp = {this.searchbarSearch} onBlur = {this.hideSuggestions}/><i className="fas fa-search"></i>
-        <div className={`searchbar-suggestions ${this.isSuggestionsActive()}`}>
-          {this.state.searchbarSuggestions.map((suggestion, index)=>{
-            return <Suggestion suggestion = {suggestion} key = {index} selectTargetCompany = {this.props.selectTargetCompany} />
-          }) }
-        </div>
+  return (
+    <div className="searchbar">
+      <input
+        className="searchbar-input"
+        type="text"
+        placeholder="Search a Stock"
+        onKeyUp = {_onSearchbarKeyUp}
+        onBlur = {_onResetSearchbarSuggestions}
+      />
+      <i className="fas fa-search" />
+      <div className={`searchbar-suggestions ${!!searchbarSuggestions.length ? 'visible' : 'hidden'}`}>
+        {searchbarSuggestions.map((suggestion={}, index) => 
+          <Suggestion
+            key={index}  
+            name={suggestion.name}
+            symbol={suggestion.symbol}
+            onSelectTargetCompany={onSelectTargetCompany}
+          />
+        )}
       </div>
+    </div>
 
-    );
-  }
+  );
 
 }
 

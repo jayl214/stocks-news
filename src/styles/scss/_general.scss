@@ -1,10 +1,11 @@
-.app-header {
-  .app-intro{
-    font-size: 200%;
+body{
+  height: 100vh;
+  // background-image: linear-gradient(to bottom right, #f69aa5, #8d9bed);
+}
+.header {
+  .header__title{
+    font-size: 2rem;
     @include font1
-    mark{
-      // background-color: rgba(255,236,0,1);
-    }
   }
 }
 
