@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "await-of": "^3.0.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.3",
     "dotenv": "^8.2.0",
     "fuse.js": "^3.6.1",
